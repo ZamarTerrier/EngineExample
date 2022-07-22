@@ -30,6 +30,22 @@ bool lock_cursor = true, esc_press = false;
 
 char path[] = "/home/ilia/Projects/Game";
 
+void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods){
+    if ( key == GLFW_KEY_ESCAPE && action == GLFW_PRESS && !esc_press){
+
+        if(lock_cursor)
+            EngineHideCursor(2);
+        else
+            EngineHideCursor(0);
+
+        lock_cursor = !lock_cursor;
+
+        esc_press = true;
+
+    }else if(key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
+        esc_press = false;
+}
+
 void KeyUpdateInput(float deltaTime)
 {
     vec3 up = {0.0f,1.0f,0.0f};
@@ -50,19 +66,7 @@ void KeyUpdateInput(float deltaTime)
         setViewPos(v3_add(pos, v3_muls(v3_norm(v3_cross(getViewRotation(), up)), cameraSpeed * deltaTime)));
     }
 
-    if (EngineGetKeyPress(GLFW_KEY_ESCAPE) && !esc_press){
 
-        if(lock_cursor)
-            EngineHideCursor(2);
-        else
-            EngineHideCursor(0);
-
-        lock_cursor = !lock_cursor;
-
-        esc_press = true;
-
-    }else if(!EngineGetKeyPress(GLFW_KEY_ESCAPE))
-        esc_press = false;
 }
 
 void CamRotateView(float deltaTime){
@@ -169,6 +173,8 @@ void Init3DObjects(){
 }
 
 void Init(){
+
+    EngineSetKeyCallback((void *)KeyCallback);
 
     EngineHideCursor(1);
 

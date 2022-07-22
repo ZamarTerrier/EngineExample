@@ -6,6 +6,7 @@ layout(location = 0) in vec3 fragColor;
 layout(location = 1) in vec2 fragTexCoord;
 
 float outline_thickness = 0.2;
+vec2 repeat = vec2(4, 4);
 vec3 outline_colour = vec3(0, 0, 1);
 float outline_threshold = 0.5;
 
@@ -13,7 +14,7 @@ layout(location = 0) out vec4 outColor;
 
 void main() {
 
-    vec4 color = texture(texSampler, fragTexCoord);
+    vec4 color = texture(texSampler, vec2(mod(fragTexCoord.x * repeat.x, 1), mod(fragTexCoord.y * repeat.y, 1)));
 
     if (color.a <= outline_threshold) {
             ivec2 size = textureSize(texSampler, 0);

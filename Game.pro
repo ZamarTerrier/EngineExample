@@ -18,6 +18,9 @@ DEPENDPATH += $$PWD/../GameEngine
 LIBS += -lglfw -lvulkan -ldl -lpthread -lX11 -lXrandr
 
 DISTFILES += \
+    shaders/3DObject/line_shader.frag \
+    shaders/3DObject/outline_shader.frag \
+    shaders/3DObject/outline_shader.vert \
     shaders/3DObject/shader.frag \
     shaders/3DObject/shader.vert \
     shaders/Sprite/shader.frag \
