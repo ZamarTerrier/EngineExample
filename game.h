@@ -2,7 +2,6 @@
 #define GAME_H
 
 #include "engine.h"
-#include "primitiveObject.h"
 #include "spriteObject.h"
 #include "textObject.h"
 

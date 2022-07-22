@@ -1,5 +1,6 @@
 #include "game.h"
 
+#include "primitiveObject.h"
 #include "transform.h"
 
 #include "camera.h"
@@ -23,7 +24,13 @@ float yaw = -90.f, pitch = 0;
 
 float cameraSpeed = 4.5f, sensitivity = 2.0f;
 
-void key_update(float deltaTime)
+float speed = 100;
+
+bool lock_cursor = true, esc_press = false;
+
+char path[] = "/home/ilia/Projects/Game";
+
+void KeyUpdateInput(float deltaTime)
 {
     vec3 up = {0.0f,1.0f,0.0f};
 
@@ -43,11 +50,22 @@ void key_update(float deltaTime)
         setViewPos(v3_add(pos, v3_muls(v3_norm(v3_cross(getViewRotation(), up)), cameraSpeed * deltaTime)));
     }
 
-    if (EngineGetKeyPress(GLFW_KEY_ESCAPE))
-        glfwSetWindowShouldClose(window, GL_TRUE);
+    if (EngineGetKeyPress(GLFW_KEY_ESCAPE) && !esc_press){
+
+        if(lock_cursor)
+            EngineHideCursor(2);
+        else
+            EngineHideCursor(0);
+
+        lock_cursor = !lock_cursor;
+
+        esc_press = true;
+
+    }else if(!EngineGetKeyPress(GLFW_KEY_ESCAPE))
+        esc_press = false;
 }
 
-void someRotate(float deltaTime){
+void CamRotateView(float deltaTime){
 
     double xpos, ypos;
 
@@ -75,49 +93,33 @@ void someRotate(float deltaTime){
     setViewRotation(direction);
 }
 
-void Init(){
+void InitText(){
 
-    EngineHideCursor(1);
+    char *font;
+    char *vertShdr;
+    char *fragShdr;
 
-    Camera2DInit(&camera2D);
-    Camera3DInit(&camera3D);
-
-    go = (SpriteObject *) calloc(1, sizeof(SpriteObject));
-    initSpriteObject(go, (vec2){100.f, 100.f}, (vec2){0, 0.f}, "/home/ilia/Projects/Game/textures/texture.png", "/home/ilia/Projects/Game/shaders/Sprite/vert.spv", "/home/ilia/Projects/Game/shaders/Sprite/frag.spv");
-
-    go2 = (SpriteObject *) calloc(1, sizeof(SpriteObject));
-    initSpriteObject(go2, (vec2){200.f, 200.f}, (vec2){-100, 0.f}, "/home/ilia/Projects/Game/textures/texture.png", "/home/ilia/Projects/Game/shaders/Sprite/vert.spv", "/home/ilia/Projects/Game/shaders/Sprite/frag.spv");
-
-    go3 = (SpriteObject *) calloc(1, sizeof(SpriteObject));
-    initSpriteObject(go3, (vec2){600.f, 600.f}, (vec2){-100, 0.f}, "/home/ilia/Projects/Game/textures/texture.png", "/home/ilia/Projects/Game/shaders/Sprite/vert.spv", "/home/ilia/Projects/Game/shaders/Sprite/frag.spv");
-
-    go3D = (PrimitiveObject *) calloc(1, sizeof(PrimitiveObject));
-    PrimitiveObjectInit(go3D);
-
-    go3D->transform.position.z = 6;
-    go3D->transform.scale.z = 2;
-
-    go3D2 = (PrimitiveObject *) calloc(1, sizeof(PrimitiveObject));
-    PrimitiveObjectInit(go3D2);
-
-    go3D2->transform.position.z = 8;
-    go3D2->transform.scale.y = 2;
-    go3D2->transform.scale.x = 2;
+    font = add_string(path, "/fonts/null-normal.otf");
+    vertShdr = add_string(path,"/shaders/text/vert.spv");
+    fragShdr = add_string(path,"/shaders/text/frag.spv");
 
     to = (TextObject *) calloc(1, sizeof(TextObject));
-    initTextObject(to, "/home/ilia/Projects/Game/fonts/null-normal.otf", "/home/ilia/Projects/Game/shaders/text/vert.spv", "/home/ilia/Projects/Game/shaders/text/frag.spv");
+    initTextObject(to, font, vertShdr, fragShdr);
     SetTextColor(to, (vec3){1.0f,0.0f,0.0f});
     addTextW(L"Съешь еще этих французких булок, да выпей чаю!", to);
     setPosTransform2D(to, (vec2){50.0f, 50.f});
 
+    free(font);
+    font = add_string(path, "/fonts/fantazer-normal.ttf");
+
     to2 = (TextObject *) calloc(1, sizeof(TextObject));
-    initTextObject(to2, "/home/ilia/Projects/Game/fonts/fantazer-normal.ttf", "/home/ilia/Projects/Game/shaders/text/vert.spv", "/home/ilia/Projects/Game/shaders/text/frag.spv");
+    initTextObject(to2, font, vertShdr, fragShdr);
     SetTextColor(to2, (vec3){0.0f,1.0f,0.0f});
     addText("Welcome to city 17!", to2);
     setPosTransform2D(to2, (vec2){-50.0f, -50.f});
 
     to3 = (TextObject *) calloc(1, sizeof(TextObject));
-    initTextObject(to3, "/home/ilia/Projects/Game/fonts/fantazer-normal.ttf", "/home/ilia/Projects/Game/shaders/text/vert.spv", "/home/ilia/Projects/Game/shaders/text/frag.spv");
+    initTextObject(to3, font, vertShdr, fragShdr);
     SetTextColor(to3, (vec3){1.0f,0.0f,0.0f});
     addTextW(L"СЪЕШЬ ЕЩЕ ЭТИХ ФРАНЦУЗСКИХ БУЛОК, ДА ВЫПЕЙ ЧАЮ!", to3);
     setPosTransform2D(to3, (vec2){50.0f, 150.f});
@@ -126,14 +128,59 @@ void Init(){
 
 }
 
-void Update(float deltaTime){
+void Init2DObjects(){
 
-    someRotate(deltaTime);
+    char *texture;
+    char *vertShdr;
+    char *fragShdr;
 
-    float speed = 100;
+    texture = add_string(path,"/textures/texture.png");
+    vertShdr = add_string(path,"/shaders/Sprite/vert.spv");
+    fragShdr = add_string(path,"/shaders/Sprite/frag.spv");
 
-    key_update(deltaTime);
+    go = (SpriteObject *) calloc(1, sizeof(SpriteObject));
+    initSpriteObject(go, (vec2){100.f, 100.f}, (vec2){0, 0.f}, texture, vertShdr, fragShdr);
 
+    go2 = (SpriteObject *) calloc(1, sizeof(SpriteObject));
+    initSpriteObject(go2, (vec2){200.f, 200.f}, (vec2){-100, 0.f}, texture, vertShdr, fragShdr);
+
+    go3 = (SpriteObject *) calloc(1, sizeof(SpriteObject));
+    initSpriteObject(go3, (vec2){600.f, 600.f}, (vec2){-100, 0.f}, texture, vertShdr, fragShdr);
+
+}
+
+void Init3DObjects(){
+
+    char *texture;
+    char *vertShdr;
+    char *fragShdr;
+
+    vertShdr = add_string(path,"/shaders/3DObject/vert.spv");
+    fragShdr = add_string(path,"/shaders/3DObject/frag.spv");
+    texture = add_string(path, "/textures/texture2.png");
+
+    go3D = (PrimitiveObject *) calloc(1, sizeof(PrimitiveObject));
+    PrimitiveObjectInit(go3D, (vec3){1.f, 1.f, 2.f}, (vec3){0, 0.f, 6.f}, texture, vertShdr, fragShdr, ENGINE_PRIMITIVE3D_CUBE);
+
+
+    go3D2 = (PrimitiveObject *) calloc(1, sizeof(PrimitiveObject));
+    PrimitiveObjectInit(go3D2, (vec3){2.f, 2.f, 1.f}, (vec3){0, 0.f, 8.f}, texture, vertShdr, fragShdr, ENGINE_PRIMITIVE3D_QUAD);
+
+}
+
+void Init(){
+
+    EngineHideCursor(1);
+
+    Camera2DInit(&camera2D);
+    Camera3DInit(&camera3D);
+
+    Init2DObjects();
+    Init3DObjects();
+    InitText();
+}
+
+void Update2D(float deltaTime){
     vec2 newPos;
 
     newPos = getPosTransform2D(go);
@@ -160,8 +207,6 @@ void Update(float deltaTime){
     newPos.y += 1.f * deltaTime * speed;
     setOffsetTransform(go3, newPos);
 
-    go3D->transform.rotation.y += 1.f * deltaTime * speed;
-    go3D->transform.rotation.x += 3.f * deltaTime * speed;
 
     if(getPosTransform2D(go).x > getViewPos2D().x + getWindowSize().x + getSizeGameObject(&go->go).x)
     {
@@ -183,6 +228,30 @@ void Update(float deltaTime){
         newPos.y = 0;
         setPosTransform2D(go3, newPos);
     }
+
+}
+
+void Update3D(float deltaTime){
+
+    vec3 rot = getRotateTransform3D(go3D);
+    rot.y += 1.f * deltaTime * speed;
+    rot.x += 3.f * deltaTime * speed;
+    setRotateTransform3D(go3D, rot);
+
+}
+
+void Update(float deltaTime){
+
+
+    if(lock_cursor){
+        CamRotateView(deltaTime);
+
+        KeyUpdateInput(deltaTime);
+    }
+
+    Update2D(deltaTime);
+
+    Update3D(deltaTime);
 
 }
 
