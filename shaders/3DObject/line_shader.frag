@@ -1,8 +1,8 @@
 #version 450
 
-layout(location = 0) out vec4 outColor;
-
 vec3 LineColor = vec3(1,1,1);
+
+layout(location = 0) out vec4 outColor;
 
 void main(void)
 {

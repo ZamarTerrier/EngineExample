@@ -4,7 +4,13 @@
 #include "transform.h"
 
 #include "camera.h"
+
+#include <stdlib.h>
 #include <math.h>
+
+typedef struct {
+    float time;
+} DataBuffer;
 
 SpriteObject* go;
 SpriteObject* go2;
@@ -12,6 +18,7 @@ SpriteObject* go3;
 
 GameObject3D* go3D;
 GameObject3D* go3D2;
+GameObject3D* go3D3;
 
 Camera2D camera2D;
 Camera3D camera3D;
@@ -111,24 +118,21 @@ void InitText(){
     initTextObject(to, font, vertShdr, fragShdr);
     SetTextColor(to, (vec3){1.0f,0.0f,0.0f});
     addTextW(L"Съешь еще этих французких булок, да выпей чаю!", to);
-    setPosTransform2D(to, (vec2){50.0f, 50.f});
+    setPosTransform2D(to, (vec2){-800.0f, -1000.f});
 
-    free(font);
     font = add_string(path, "/fonts/fantazer-normal.ttf");
 
     to2 = (TextObject *) calloc(1, sizeof(TextObject));
     initTextObject(to2, font, vertShdr, fragShdr);
     SetTextColor(to2, (vec3){0.0f,1.0f,0.0f});
     addText("Welcome to city 17!", to2);
-    setPosTransform2D(to2, (vec2){-50.0f, -50.f});
+    setPosTransform2D(to2, (vec2){-500.0f, -900.f});
 
     to3 = (TextObject *) calloc(1, sizeof(TextObject));
     initTextObject(to3, font, vertShdr, fragShdr);
     SetTextColor(to3, (vec3){1.0f,0.0f,0.0f});
     addTextW(L"СЪЕШЬ ЕЩЕ ЭТИХ ФРАНЦУЗСКИХ БУЛОК, ДА ВЫПЕЙ ЧАЮ!", to3);
-    setPosTransform2D(to3, (vec2){50.0f, 150.f});
-
-    setViewPos((vec3){0.0f,0.0f, -5.0f});
+    setPosTransform2D(to3, (vec2){-1000.0f, -1100.f});
 
 }
 
@@ -143,14 +147,73 @@ void Init2DObjects(){
     fragShdr = add_string(path,"/shaders/Sprite/frag.spv");
 
     go = (SpriteObject *) calloc(1, sizeof(SpriteObject));
-    initSpriteObject(go, (vec2){100.f, 100.f}, (vec2){0, 0.f}, texture, vertShdr, fragShdr);
+    initSpriteObject(go, (vec2){400.f, 400.f}, (vec2){-3000, -2200.f}, texture, vertShdr, fragShdr);
 
     go2 = (SpriteObject *) calloc(1, sizeof(SpriteObject));
-    initSpriteObject(go2, (vec2){200.f, 200.f}, (vec2){-100, 0.f}, texture, vertShdr, fragShdr);
+    initSpriteObject(go2, (vec2){200.f, 200.f}, (vec2){-4000, -4000.f}, texture, vertShdr, fragShdr);
 
     go3 = (SpriteObject *) calloc(1, sizeof(SpriteObject));
-    initSpriteObject(go3, (vec2){600.f, 600.f}, (vec2){-100, 0.f}, texture, vertShdr, fragShdr);
+    initSpriteObject(go3, (vec2){600.f, 600.f}, (vec2){-3300, -1600.f}, texture, vertShdr, fragShdr);
 
+}
+
+void UpdateMyUniform(GameObject3D* go){
+
+    Camera3D* cam = (Camera3D*) cam3D;
+    void* data;
+
+    ModelBuffer3D mbo = {};
+    vec3 cameraUp = {0.0f,1.0f, 0.0f};
+    mat4 edenMat = mat4_f(1,0,0,0,
+                          0,1,0,0,
+                          0,0,1,0,
+                          0,0,0,1);
+
+    mbo.model = m4_translate(m4_rotation_matrix(m4_scale_mat(go->transform.scale), go->transform.rotation), go->transform.position);
+    mbo.view = m4_look_at(cam->position, v3_add(cam->position, cam->rotation), cameraUp);
+    mbo.proj = m4_perspective(45.0f, 0.01f, 100.0f);
+    mbo.proj.m[1][1] *= -1;
+
+    vkMapMemory(device, go->graphObj.local.uniformBuffersMemory[0][imageIndex], 0, sizeof(mbo), 0, &data);
+    memcpy(data, &mbo, sizeof(mbo));
+    vkUnmapMemory(device, go->graphObj.local.uniformBuffersMemory[0][imageIndex]);
+
+    DataBuffer dBuffer;
+    dBuffer.time = glfwGetTime();
+
+    vkMapMemory(device, go->graphObj.local.uniformBuffersMemory[1][imageIndex], 0, sizeof(dBuffer), 0, &data);
+    memcpy(data, &dBuffer, sizeof(dBuffer));
+    vkUnmapMemory(device, go->graphObj.local.uniformBuffersMemory[1][imageIndex]);
+}
+
+void InitMyGO(){
+
+    go3D3 = (GameObject3D *) calloc(1, sizeof(GameObject3D));
+
+    initGameObject3D(go3D3);
+
+    GameObject3DSetUpdateFunc(go3D3, (void *)UpdateMyUniform);
+
+    GraphicsObject3DSetVertex(&go3D3->graphObj, quadVert, 4, quadIndx, 6);
+
+    addUniformObject(&go3D3->graphObj.local, sizeof(ModelBuffer3D));
+    addUniformObject(&go3D3->graphObj.local, sizeof(DataBuffer));
+
+    GameObject3DAddTexture(go3D3, "/home/ilia/Projects/Game/textures/texture.png");
+    GameObject3DCreateDrawItems(go3D3);
+
+    PipelineSetting setting;
+
+    setting.poligonMode = VK_POLYGON_MODE_FILL;
+    setting.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+    setting.vertShader = "/home/ilia/Projects/Game/shaders/3DObject/outline_vert.spv";
+    setting.fragShader = "/home/ilia/Projects/Game/shaders/3DObject/outline_frag.spv";
+    setting.drawType = 0;
+    GameObject3DAddSettingPipeline(go3D3, setting);
+    createGraphicsPipeline(&go3D3->graphObj);
+
+    setScaleTransform3D(go3D3, (vec3){1,1,1});
+    setPosTransform3D(go3D3, (vec3){0,0,2});
 }
 
 void Init3DObjects(){
@@ -170,6 +233,7 @@ void Init3DObjects(){
     go3D2 = (PrimitiveObject *) calloc(1, sizeof(PrimitiveObject));
     PrimitiveObjectInit(go3D2, (vec3){2.f, 2.f, 1.f}, (vec3){0, 0.f, 8.f}, texture, vertShdr, fragShdr, ENGINE_PRIMITIVE3D_QUAD);
 
+    setViewPos((vec3){0.0f,0.0f, -2.0f});
 }
 
 void Init(){
@@ -184,6 +248,8 @@ void Init(){
     Init2DObjects();
     Init3DObjects();
     InitText();
+
+    InitMyGO();
 }
 
 void Update2D(float deltaTime){
@@ -255,7 +321,7 @@ void Update(float deltaTime){
         KeyUpdateInput(deltaTime);
     }
 
-    Update2D(deltaTime);
+    //Update2D(deltaTime);
 
     Update3D(deltaTime);
 
@@ -264,6 +330,7 @@ void Update(float deltaTime){
 void Draw(){
     engDraw3D(go3D);
     engDraw3D(go3D2);
+    engDraw3D(go3D3);
 
     engDraw(go);
     engDraw(go2);
@@ -284,6 +351,7 @@ void CleanUp(){
 
     GameObject3DDestroy(go3D);
     GameObject3DDestroy(go3D2);
+    GameObject3DDestroy(go3D3);
 
     destroyTextObject(to);
     destroyTextObject(to2);
