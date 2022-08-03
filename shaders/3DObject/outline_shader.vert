@@ -18,6 +18,7 @@ layout(location = 3) in vec2 inTexCoord;
 layout(location = 0) out vec3 fragColor;
 layout(location = 1) out vec2 fragTexCoord;
 layout(location = 2) out vec4 fragVertCoord;
+layout(location = 3) out float time;
 
 float hash( float n ) {
     return fract(sin(n)*43758.5453);
@@ -50,5 +51,6 @@ void main() {
     //pos.z -= fbm(inTexCoord * data.time * 0.1);
     fragVertCoord = mbo.proj * mbo.view * pos;
     gl_Position = fragVertCoord;
+    time = data.time;
 
 }

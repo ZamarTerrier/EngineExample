@@ -16,6 +16,8 @@ SpriteObject* go;
 SpriteObject* go2;
 SpriteObject* go3;
 
+GameObject2D* test2D;
+
 GameObject3D* go3D;
 GameObject3D* go3D2;
 GameObject3D* go3D3;
@@ -216,6 +218,53 @@ void InitMyGO(){
     setPosTransform3D(go3D3, (vec3){0,0,2});
 }
 
+void Update2DUniform(GameObject2D* go){
+    DataBuffer dBuffer;
+    dBuffer.time = glfwGetTime();
+
+    void* data;
+
+    vkMapMemory(device, go->graphObj.local.uniformBuffersMemory[0][imageIndex], 0, sizeof(dBuffer), 0, &data);
+    memcpy(data, &dBuffer, sizeof(dBuffer));
+    vkUnmapMemory(device, go->graphObj.local.uniformBuffersMemory[0][imageIndex]);
+}
+
+void InitMyGO2D(){
+
+    test2D = (GameObject2D *) calloc(1, sizeof(GameObject2D));
+
+    initGameObject2D(test2D);
+
+    SetUpdateFunc(test2D, (void *)Update2DUniform);
+
+    Vertex2D tempVert[] = {
+        {{-1.0f, -1.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
+        {{-1.0f, 1.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 1.0f}},
+        {{1.0f, 1.0f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
+        {{1.0f, -1.0f}, {0.5f, 0.5f, 0.5f}, {1.0f, 0.0f}},
+    };
+
+    GraphicsObject3DSetVertex(&test2D->graphObj, tempVert, 4, planeIndx, 6);
+
+    addUniformObject(&test2D->graphObj.local, sizeof(DataBuffer));
+
+    GameObject3DAddTexture(test2D, "/home/ilia/Projects/Game/textures/texture.png");
+    GameObject3DCreateDrawItems(test2D);
+
+    PipelineSetting setting;
+
+    setting.poligonMode = VK_POLYGON_MODE_FILL;
+    setting.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+    setting.vertShader = "/home/ilia/Projects/Game/shaders/Sprite/test2D_vert.spv";
+    setting.fragShader = "/home/ilia/Projects/Game/shaders/Sprite/test2D_frag.spv";
+    setting.drawType = 0;
+    addSettingPipeline(test2D, setting);
+    createGraphicsPipeline(&test2D->graphObj);
+
+    setScaleTransform2D(test2D, (vec2){1,1});
+    setPosTransform2D(test2D, (vec2){0,0});
+}
+
 void Init3DObjects(){
 
     char *texture;
@@ -250,6 +299,7 @@ void Init(){
     InitText();
 
     InitMyGO();
+    InitMyGO2D();
 }
 
 void Update2D(float deltaTime){
@@ -332,10 +382,11 @@ void Draw(){
     engDraw3D(go3D2);
     engDraw3D(go3D3);
 
+    engDraw(test2D);
+
     engDraw(go);
     engDraw(go2);
     engDraw(go3);
-
 
     engDrawText(to);
     engDrawText(to2);
@@ -352,6 +403,8 @@ void CleanUp(){
     GameObject3DDestroy(go3D);
     GameObject3DDestroy(go3D2);
     GameObject3DDestroy(go3D3);
+
+    destroyGameObject(test2D);
 
     destroyTextObject(to);
     destroyTextObject(to2);

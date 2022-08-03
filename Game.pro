@@ -25,4 +25,6 @@ DISTFILES += \
     shaders/3DObject/shader.frag \
     shaders/3DObject/shader.vert \
     shaders/Sprite/shader.frag \
-    shaders/Sprite/shader.vert
+    shaders/Sprite/shader.vert \
+    shaders/Sprite/test2D.frag \
+    shaders/Sprite/test2D.vert
