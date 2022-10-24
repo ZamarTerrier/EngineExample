@@ -4,14 +4,16 @@ obj = bin/fonts/fantazer-normal.o \
 	bin/fonts/arial.o \
 	bin/fonts/Lilita_Regular.o \
 	bin/fonts/null-normal.o \
-	bin/shaders/model/model_frag.o \
-	bin/shaders/model/model_vert.o \
+	bin/shaders/model/frag.o \
+	bin/shaders/model/vert.o \
 	bin/shaders/gui/widget_frag.o \
 	bin/shaders/gui/widget_vert.o \
-	bin/shaders/gui/widget_text_frag.o \
-	bin/shaders/gui/widget_text_vert.o \
 	bin/shaders/gui/widget_window_frag.o \
 	bin/shaders/gui/widget_window_vert.o \
+	bin/shaders/text/frag.o \
+	bin/shaders/text/vert.o \
+	bin/shaders/sprite/frag.o \
+	bin/shaders/sprite/vert.o \
 
 all: clean $(obj)
 
@@ -31,6 +33,24 @@ shaders/model/%.spv : shaders/model/%.vert
 	glslc $< -o $@	
 	
 bin/shaders/model/%.o : shaders/model/%.spv
+	ld -r -b binary $< -o $@
+	
+shaders/text/%.spv : shaders/text/%.frag
+	glslc $< -o $@	
+	
+shaders/text/%.spv : shaders/text/%.vert
+	glslc $< -o $@	
+	
+bin/shaders/text/%.o : shaders/text/%.spv
+	ld -r -b binary $< -o $@
+		
+shaders/sprite/%.spv : shaders/sprite/%.frag
+	glslc $< -o $@	
+	
+shaders/sprite/%.spv : shaders/sprite/%.vert
+	glslc $< -o $@	
+	
+bin/shaders/sprite/%.o : shaders/sprite/%.spv
 	ld -r -b binary $< -o $@
 
 bin/fonts/%.o : fonts/%.ttf

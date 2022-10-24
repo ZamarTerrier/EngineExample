@@ -24,6 +24,7 @@ ProjectionPlaneObject projObj;
 PrimitiveObject plane;
 
 ModelObject3D teMO;
+ModelObject3D teMO2;
 
 void InitMeshes(){
 
@@ -37,7 +38,15 @@ void InitMeshes(){
     dParam.drawType = 0;
     dParam.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
     Load3DObjModel(&teMO, objpath, dParam);
-    AddPhyObject(&teMO.go, PHYSICS_COLLIDER_TYPE_MESH, PHYSICS_PHYSIC_STATIC, false);
+    //AddPhyObject(&teMO.go, PHYSICS_COLLIDER_TYPE_MESH, PHYSICS_PHYSIC_STATIC, false);
+
+
+    ToolsAddStrings(objpath, 256, path, "/models/TheRocketAnimation.fbx");
+    ToolsAddStrings(dParam.filePath, 256, path, "/textures/hover_board/Color.png");
+    Load3DFBXModel(&teMO2, objpath, dParam);
+    Transform3DSetRotate(&teMO2, (vec3){ -90, 0, 0 });
+    Transform3DSetScale(&teMO2, (vec3){ 1, 1, 1 });
+    //AddPhyObject(&teMO.go, PHYSICS_COLLIDER_TYPE_MESH, PHYSICS_PHYSIC_STATIC, false);
 
     vec3 scale = {1, 1, 1};
     vec3 pos = {0, 0, 0};
@@ -60,7 +69,7 @@ void InitMeshes(){
     pParam.sectorCount = 200;
     pParam.stackCount = 200;
     PrimitiveObjectInit(&plane, scale, pos, dParam, ENGINE_PRIMITIVE3D_PLANE, &pParam);
-    AddPhyObject(&plane.go, PHYSICS_COLLIDER_TYPE_MESH, PHYSICS_PHYSIC_STATIC, false);
+    //AddPhyObject(&plane.go, PHYSICS_COLLIDER_TYPE_MESH, PHYSICS_PHYSIC_STATIC, false);
 
     float maxVal = 30, res = 0;
 
@@ -82,7 +91,8 @@ void DrawMeshes(){
 
     engDraw(&projObj);
 
-    engDraw(&teMO.go);
+    //engDraw(&teMO);
+    engDraw(&teMO2);
 
     engDraw(&plane);
 
@@ -91,6 +101,7 @@ void DrawMeshes(){
 void DestroyMeshes(){
 
     DestroyOBJModel(&teMO);
+    DestroyFBXModel(&teMO2);
 
     GameObject2DDestroy(&projObj);
 

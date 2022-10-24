@@ -9,9 +9,11 @@
 #include "e_widget_range.h"
 #include "e_widget_entry.h"
 #include "e_widget_entry_area.h"
+#include "e_widget_image.h"
 #include "engine.h"
 
 #include "e_math.h"
+#include "tools.h"
 
 #include "resource.h"
 
@@ -24,6 +26,7 @@ EWidgetList list;
 EWidgetEntry entry;
 EWidgetEntry entry2;
 EWidgetEntryArea entry_area;
+EWidgetImage img;
 EWidget el1;
 EWidget el2;
 EWidget el3;
@@ -68,17 +71,6 @@ void GUIInit(){
     DrawParam dParam = {};
 
     WindowWidgetInit(&window, "Temp window", size, dParam, position);
-
-    WidgetInit(&el1, dParam, &window);
-    el1.color = (vec4){0.1, 0.8, 0.1, 1.0};
-    position.x = 0;
-    position.y = 0;
-    size.x = 50;
-    size.y = 50;
-    Transform2DSetPosition(&el1, position);
-    Transform2DSetScale(&el1, size);
-    WidgetConnect(&el1, GUI_TRIGGER_MOUSE_PRESS, TempPress, NULL);
-    WidgetConnect(&el1, GUI_TRIGGER_MOUSE_MOVE, TempMove, NULL);
 
     position.x = 0;
     position.y = 80;
@@ -144,7 +136,24 @@ void GUIInit(){
     Transform2DSetScale(&entry_area, eSize);
     Transform2DSetPosition(&entry_area, position);
 
-    WindowWidgetShow(&window);
+    WidgetInit(&el1, dParam, &window);
+    el1.color = (vec4){0.1, 0.8, 0.1, 1.0};
+    position.x = 0;
+    position.y = 0;
+    size.x = 50;
+    size.y = 50;
+    Transform2DSetPosition(&el1, position);
+    Transform2DSetScale(&el1, size);
+    WidgetConnect(&el1, GUI_TRIGGER_MOUSE_PRESS, TempPress, NULL);
+    WidgetConnect(&el1, GUI_TRIGGER_MOUSE_MOVE, TempMove, NULL);
+
+    ToolsAddStrings(dParam.filePath, 256, path, "/textures/texture.png");
+    ImageWidgetInit(&img, dParam, &el1);
+    img.widget.color = (vec4){1.0, 1.0, 1.0, 1.0};
+    size.x = 100;
+    size.y = 100;
+    Transform2DSetScale(&img, size);
+    memset(dParam.filePath, 0, 256);
 
     WidgetInit(&el2, dParam, &el1);
     el2.color = (vec4){0.1, 0.1, 0.3, 1.0};
@@ -157,14 +166,12 @@ void GUIInit(){
     WidgetConnect(&el2, GUI_TRIGGER_MOUSE_PRESS, TempPress, NULL);
     WidgetConnect(&el2, GUI_TRIGGER_MOUSE_MOVE, TempMove, NULL);
 
-
     TextWidgetInit(&wt, 9,  dParam, &el2);
     wt.tData.font.color = (vec3){0.7, 0.1, 0.1};
     position.x = 0;
     position.y = 20;
     Transform2DSetPosition(&wt, position);
     TextWidgetSetText(&wt, "Welkome in city 17!");
-
 
     position.x = 0;
     position.y = 0;
@@ -181,6 +188,8 @@ void GUIInit(){
     Transform2DSetPosition(&el3, position);
     Transform2DSetScale(&el3, size);
 
+    WindowWidgetHide(&window);
+    WindowWidgetHide(&window2);
 }
 
 
