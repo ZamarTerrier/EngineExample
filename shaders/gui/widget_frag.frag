@@ -13,7 +13,7 @@ layout(binding = 0) uniform GUIBuffer{
     vec2 mouse;
     vec2 position;
     vec2 size;
-    vec3 color;
+    vec4 color;
 } guib;
 
 layout(binding = 1) uniform MaskObjectsBuffer{
@@ -46,7 +46,7 @@ void main(void)
 
    float d = guiScene(fragTexCoord);
 
-   vec3 color = vec3(0);
+   vec4 color = vec4(0);
 
    if(d > 0)
    {
@@ -63,5 +63,5 @@ void main(void)
        color = guib.color;
    }
 
-    outColor = vec4(color, 1.0);
+    outColor = vec4(color);
 }

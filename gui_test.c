@@ -16,6 +16,7 @@
 #include "resource.h"
 
 EWidgetWindow window;
+EWidgetWindow window2;
 EWidgetButton button;
 EWidgetCombobox combobox;
 EWidgetRange range;
@@ -66,10 +67,10 @@ void GUIInit(){
 
     DrawParam dParam = {};
 
-    WindowWidgetInit(&window, dParam, size, position);
+    WindowWidgetInit(&window, "Temp window", size, dParam, position);
 
-   WidgetInit(&el1, dParam, &window);
-    el1.color = (vec3){0.1, 0.8, 0.1};
+    WidgetInit(&el1, dParam, &window);
+    el1.color = (vec4){0.1, 0.8, 0.1, 1.0};
     position.x = 0;
     position.y = 0;
     size.x = 50;
@@ -83,7 +84,7 @@ void GUIInit(){
     position.y = 80;
     size.x = 60;
     size.y = 20;
-    ButtonWidgetInit(&button, "Pressss", &window);
+    ButtonWidgetInit(&button, "Pressss", (vec4){ 0.4, 0.4, 0.4, 1.0}, &window);
     Transform2DSetPosition(&button, position);
     Transform2DSetScale(&button, size);
 
@@ -91,7 +92,8 @@ void GUIInit(){
     position.y = 0;
     size.x = 60;
     size.y = 170;
-    ListWidgetInit(&list, &window);
+    ListWidgetInit(&list, 60, 20, &window);
+    ListWidgetSetColor(&list, (vec4){0.5, 0.1, 0.1, 1.0});
     Transform2DSetPosition(&list, position);
     Transform2DSetScale(&list, size);
     ListWidgetAddItem(&list, "Temp 1");
@@ -119,7 +121,7 @@ void GUIInit(){
 
     position.x = 350;
     position.y = 50;
-    RangeWidgetInit(&range, 20, 80, &window);
+    RangeWidgetInit(&range, (vec2){60, 20}, 20, 80, &window);
     Transform2DSetPosition(&range, position);
 
     position.x = 350;
@@ -142,8 +144,12 @@ void GUIInit(){
     Transform2DSetScale(&entry_area, eSize);
     Transform2DSetPosition(&entry_area, position);
 
+    WindowWidgetShow(&window);
+
     WidgetInit(&el2, dParam, &el1);
-    el2.color = (vec3){0.1, 0.1, 0.3};
+    el2.color = (vec4){0.1, 0.1, 0.3, 1.0};
+    position.x = 0;
+    position.y = 0;
     size.x = 20;
     size.y = 20;
     Transform2DSetPosition(&el2, position);
@@ -151,14 +157,6 @@ void GUIInit(){
     WidgetConnect(&el2, GUI_TRIGGER_MOUSE_PRESS, TempPress, NULL);
     WidgetConnect(&el2, GUI_TRIGGER_MOUSE_MOVE, TempMove, NULL);
 
-    WidgetInit(&el3, dParam, NULL);
-    el3.color = (vec3){0.1, 0.1, 0.3};
-    position.x = 0;
-    position.y = 0;
-    size.x = 20;
-    size.y = 20;
-    Transform2DSetPosition(&el3, position);
-    Transform2DSetScale(&el3, size);
 
     TextWidgetInit(&wt, 9,  dParam, &el2);
     wt.tData.font.color = (vec3){0.7, 0.1, 0.1};
@@ -167,21 +165,41 @@ void GUIInit(){
     Transform2DSetPosition(&wt, position);
     TextWidgetSetText(&wt, "Welkome in city 17!");
 
+
+    position.x = 0;
+    position.y = 0;
+    size.x = 400;
+    size.y = 300;
+    WindowWidgetInit(&window2, "Temp window2", size, dParam, position);
+
+    WidgetInit(&el3, dParam, &window2);
+    el3.color = (vec4){0.1, 0.1, 0.3, 1.0};
+    position.x = 0;
+    position.y = 0;
+    size.x = 20;
+    size.y = 20;
+    Transform2DSetPosition(&el3, position);
+    Transform2DSetScale(&el3, size);
+
 }
 
 
 void GUIUpdate(){
 
-    WindowWidgetUpdate(&window);
+    WindowWidgetUpdate(&window2);
 
-    //WidgetEventsPipe(&el4);
+    WindowWidgetUpdate(&window);
 
 }
 
 void GUIDraw(){
-    WindowWidgetDraw(&window);
+   WindowWidgetDraw(&window);
+
+   WindowWidgetDraw(&window2);
 }
 
 void GUIDestroy(){
     WindowWidgetDestroy(&window);
+
+    WindowWidgetDestroy(&window2);
 }

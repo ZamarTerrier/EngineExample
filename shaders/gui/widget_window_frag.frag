@@ -8,7 +8,7 @@ layout(binding = 0) uniform GUIBuffer{
     vec2 offset;
     vec2 position;
     vec2 size;
-    vec3 color;
+    vec4 color;
 } guib;
 
 
@@ -36,7 +36,7 @@ void main(void)
 
     float d = sdBox(fragTexCoord, position, size);
 
-    vec3 color = vec3(0);
+    vec4 color = vec4(0);
 
     if(d > 0)
     {
@@ -45,5 +45,5 @@ void main(void)
 
     color = guib.color;
 
-    outColor = vec4(color, 1.0);
+    outColor = vec4(color);
 }

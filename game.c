@@ -164,9 +164,11 @@ void Update(float deltaTime){
 }
 
 void Draw(){
+
     DrawMeshes();
 
     GUIDraw();
+
 }
 
 
