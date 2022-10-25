@@ -44,7 +44,7 @@ void InitMeshes(){
     ToolsAddStrings(objpath, 256, path, "/models/TheRocketAnimation.fbx");
     ToolsAddStrings(dParam.filePath, 256, path, "/textures/hover_board/Color.png");
     Load3DFBXModel(&teMO2, objpath, dParam);
-    Transform3DSetRotate(&teMO2, (vec3){ -90, 0, 0 });
+    Transform3DSetRotate(&teMO2, (vec3){ 0, 0, 0 });
     Transform3DSetScale(&teMO2, (vec3){ 1, 1, 1 });
     //AddPhyObject(&teMO.go, PHYSICS_COLLIDER_TYPE_MESH, PHYSICS_PHYSIC_STATIC, false);
 
@@ -89,7 +89,7 @@ void UpdateMeshes(float deltaTime){
 
 void DrawMeshes(){
 
-    engDraw(&projObj);
+    //engDraw(&projObj);
 
     //engDraw(&teMO);
     engDraw(&teMO2);
