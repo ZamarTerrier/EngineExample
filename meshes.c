@@ -8,6 +8,7 @@
 #include "primitiveObject.h"
 #include "projectionPlaneObject.h"
 #include "models.h"
+#include "glTFLoader.h"
 
 #include "buffers.h"
 #include "texture.h"
@@ -32,6 +33,7 @@ void InitMeshes(){
     memset(&dParam, 0, sizeof(dParam));
 
     char objpath[256];
+    char binpath[256];
 
     ToolsAddStrings(objpath, 256, path, "/models/rabochiy_i_kolkhoznitsa_lou_poli2.obj");
     ToolsAddStrings(dParam.filePath, 256, path, "/textures/rabochii_i_kolhoznitca/metal_defaultMat_Diffuse.png");
@@ -41,9 +43,10 @@ void InitMeshes(){
     //AddPhyObject(&teMO.go, PHYSICS_COLLIDER_TYPE_MESH, PHYSICS_PHYSIC_STATIC, false);
 
 
-    ToolsAddStrings(objpath, 256, path, "/models/TheRocketAnimation.fbx");
+    ToolsAddStrings(objpath, 256, path, "/models/Rocket_Animated.gltf");
+    ToolsAddStrings(binpath, 256, path, "/models/Rocket_Animated.bin");
     ToolsAddStrings(dParam.filePath, 256, path, "/textures/hover_board/Color.png");
-    Load3DFBXModel(&teMO2, objpath, dParam);
+    Load3DglTFModel(&teMO2, objpath, binpath, dParam);
     Transform3DSetRotate(&teMO2, (vec3){ 0, 0, 0 });
     Transform3DSetScale(&teMO2, (vec3){ 1, 1, 1 });
     //AddPhyObject(&teMO.go, PHYSICS_COLLIDER_TYPE_MESH, PHYSICS_PHYSIC_STATIC, false);
@@ -100,11 +103,9 @@ void DrawMeshes(){
 
 void DestroyMeshes(){
 
-    DestroyOBJModel(&teMO);
-    DestroyFBXModel(&teMO2);
-
-    GameObject2DDestroy(&projObj);
-
-    GameObject3DDestroy(&plane);
+    GameObjectDestroy(&teMO);
+    GameObjectDestroy(&teMO2);
+    GameObjectDestroy(&projObj);
+    GameObjectDestroy(&plane);
 
 }
