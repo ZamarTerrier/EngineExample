@@ -7,7 +7,8 @@
 #include "gameObject3D.h"
 #include "primitiveObject.h"
 #include "projectionPlaneObject.h"
-#include "models.h"
+#include "objLoader.h"
+#include "fbxLoader.h"
 #include "glTFLoader.h"
 
 #include "buffers.h"
@@ -87,7 +88,7 @@ void InitMeshes(){
 }
 
 void UpdateMeshes(float deltaTime){
-
+  Load3DglTFNextFrame(&teMO2, deltaTime);
 }
 
 void DrawMeshes(){
