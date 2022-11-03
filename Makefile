@@ -17,7 +17,7 @@ obj = bin/fonts/fantazer-normal.o \
 	bin/shaders/3d_object/frag.o \
 	bin/shaders/3d_object/vert.o \
 
-all: clean $(obj)
+all: clean $(obj) cpy
 
 shaders/3d_object/%.spv : shaders/3d_object/%.frag
 	glslc $< -o $@	
@@ -64,6 +64,9 @@ bin/fonts/%.o : fonts/%.ttf
 bin/fonts/%.o : fonts/%.otf
 	ld -r -b binary $< -o $@
 
+cpy: 
+	cp -r bin ../GameEngine
+	
 clean:
 	$(RM) *.spv bin/*.o
 

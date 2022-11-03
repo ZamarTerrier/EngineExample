@@ -7,12 +7,12 @@ struct Light{
     vec3 color;
 };
 
-layout(binding = 1) uniform LightBufferObject{
-    Light lights[256];
+layout(binding = 2) uniform LightBufferObject{
+    Light lights[16];
     int size;
 } lbo;
 
-layout(binding = 2) uniform sampler2D texSampler;
+layout(binding = 3) uniform sampler2D texSampler;
 
 layout(location = 0) in vec3 fragColor;
 layout(location = 1) in vec2 fragTexCoord;

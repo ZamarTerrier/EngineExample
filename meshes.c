@@ -44,8 +44,8 @@ void InitMeshes(){
     //AddPhyObject(&teMO.go, PHYSICS_COLLIDER_TYPE_MESH, PHYSICS_PHYSIC_STATIC, false);
 
 
-    ToolsAddStrings(objpath, 256, path, "/models/Cube.gltf");
-    ToolsAddStrings(binpath, 256, path, "/models/Cube.bin");
+    ToolsAddStrings(objpath, 256, path, "/models/Walking_Doctor.gltf");
+    ToolsAddStrings(binpath, 256, path, "/models/Walking_Doctor.bin");
     ToolsAddStrings(dParam.filePath, 256, path, "/textures/bode1.png");
     Load3DglTFModel(&teMO2, objpath, binpath, dParam);
     Transform3DSetRotateT(&teMO2.transform, (vec3){ -90, 0, 0 });
@@ -90,7 +90,7 @@ void InitMeshes(){
 }
 
 void UpdateMeshes(float deltaTime){
-  //Load3DglTFNextFrame(&teMO2, deltaTime);
+    Load3DglTFNextFrame(&teMO2, deltaTime);
 }
 
 void DrawMeshes(){
