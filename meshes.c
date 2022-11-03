@@ -40,20 +40,20 @@ void InitMeshes(){
     ToolsAddStrings(dParam.filePath, 256, path, "/textures/rabochii_i_kolhoznitca/metal_defaultMat_Diffuse.png");
     dParam.drawType = 0;
     dParam.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
-    //Load3DObjModel(&teMO, objpath, dParam);
+    Load3DObjModel(&teMO, objpath, dParam);
     //AddPhyObject(&teMO.go, PHYSICS_COLLIDER_TYPE_MESH, PHYSICS_PHYSIC_STATIC, false);
 
-    ToolsAddStrings(objpath, 256, path, "/models/Rocket_Animated.gltf");
-    ToolsAddStrings(binpath, 256, path, "/models/Rocket_Animated.bin");
+    ToolsAddStrings(objpath, 256, path, "/models/Hover_Rocket.gltf");
+    ToolsAddStrings(binpath, 256, path, "/models/Hover_Rocket.bin");
     ToolsAddStrings(dParam.filePath, 256, path, "/textures/hover_board/Color.png");
 //    ToolsAddStrings(objpath, 256, path, "/models/Walking_Doctor.gltf");
 //    ToolsAddStrings(binpath, 256, path, "/models/Walking_Doctor.bin");
 //    ToolsAddStrings(dParam.filePath, 256, path, "/textures/bode1.png");
     Load3DglTFModel(&teMO2, objpath, binpath, dParam);
-//    Transform3DSetRotateT(&teMO2.transform, (vec3){ -90, 0, 0 });
-//    Transform3DSetScaleT(&teMO2.transform, (vec3){ -0.01, 0.01, 0.01});
     Transform3DSetRotateT(&teMO2.transform, (vec3){ 0, 0, 0 });
-    Transform3DSetScaleT(&teMO2.transform, (vec3){ 1, 1, 1});
+    Transform3DSetScaleT(&teMO2.transform, (vec3){ -1, 1, 1});
+//    Transform3DSetRotateT(&teMO2.transform, (vec3){ 0, 0, 0 });
+//    Transform3DSetScaleT(&teMO2.transform, (vec3){ 1, 1, 1});
     //AddPhyObject(&teMO.go, PHYSICS_COLLIDER_TYPE_MESH, PHYSICS_PHYSIC_STATIC, false);
 
     vec3 scale = {1, 1, 1};
@@ -101,7 +101,7 @@ void DrawMeshes(){
 
     //engDraw(&projObj);
 
-    //engDraw(&teMO);
+    engDraw(&teMO);
     engDraw(&teMO2);
 
     engDraw(&plane);
@@ -110,7 +110,7 @@ void DrawMeshes(){
 
 void DestroyMeshes(){
 
-    //GameObjectDestroy(&teMO);
+    GameObjectDestroy(&teMO);
     GameObjectDestroy(&teMO2);
     GameObjectDestroy(&projObj);
     GameObjectDestroy(&plane);
