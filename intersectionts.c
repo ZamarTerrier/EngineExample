@@ -237,7 +237,7 @@ int TestCapsuleShape(void *obj1, void *shape, float *dist, float *depth, vec3 *d
     GameObject3D *model = (GameObject3D *)shape;
     PhyCapsuleParam *obj = (PhyCapsuleParam *)obj1;
 
-    vertexParam3D *vParam = &model->graphObj.shape.vParam;
+    vertexParam *vParam = &model->graphObj.shape.vParam;
     indexParam *iParam = &model->graphObj.shape.iParam;
 
     if(vParam->verticesSize <= 0)
@@ -256,13 +256,15 @@ int TestCapsuleShape(void *obj1, void *shape, float *dist, float *depth, vec3 *d
 
     int curr = 0, res = 0, buff_a = 0, buff_b = 0, cou = 0;
 
+    Vertex3D *verts = vParam->vertices;
+
     for(int i=0;i < vParam->verticesSize;i++){
 
         curr = i * 3;
 
-        p0 = v3_add(v3_mul(vParam->vertices[iParam->indices[curr]].position, scale), origPos);
-        p1 = v3_add(v3_mul(vParam->vertices[iParam->indices[curr + 1]].position, scale), origPos);
-        p2 = v3_add(v3_mul(vParam->vertices[iParam->indices[curr + 2]].position, scale), origPos);
+        p0 = v3_add(v3_mul(verts[iParam->indices[curr]].position, scale), origPos);
+        p1 = v3_add(v3_mul(verts[iParam->indices[curr + 1]].position, scale), origPos);
+        p2 = v3_add(v3_mul(verts[iParam->indices[curr + 2]].position, scale), origPos);
 
         if(v3_distance(p0, origPos) > r * r + 1.0f)
             continue;
@@ -292,7 +294,7 @@ int TestSphereShape(void *obj1, void *shape, float *dist, float *depth, vec3 *di
     GameObject3D *model = (GameObject3D *)shape;
     PhySphereParam *obj = (PhySphereParam *)obj1;
 
-    vertexParam3D *vParam = &model->graphObj.shape.vParam;
+    vertexParam *vParam = &model->graphObj.shape.vParam;
     indexParam *iParam = &model->graphObj.shape.iParam;
 
     if(vParam->verticesSize <= 0)
@@ -309,13 +311,15 @@ int TestSphereShape(void *obj1, void *shape, float *dist, float *depth, vec3 *di
 
     int curr = 0, res = 0, buff = 0, cou = 0;
 
+    Vertex3D *verts = vParam->vertices;
+
     for(int i=0;i < vParam->verticesSize;i++){
 
         curr = i * 3;
 
-        p0 = v3_add(v3_mul(vParam->vertices[iParam->indices[curr]].position, scale), origPos);
-        p1 = v3_add(v3_mul(vParam->vertices[iParam->indices[curr + 1]].position, scale), origPos);
-        p2 = v3_add(v3_mul(vParam->vertices[iParam->indices[curr + 2]].position, scale), origPos);
+        p0 = v3_add(v3_mul(verts[iParam->indices[curr]].position, scale), origPos);
+        p1 = v3_add(v3_mul(verts[iParam->indices[curr + 1]].position, scale), origPos);
+        p2 = v3_add(v3_mul(verts[iParam->indices[curr + 2]].position, scale), origPos);
 
         buff = TestSphereTriangle(obj->center, r, p0, p1, p2, &tempPos, dist, depth, dir);
 
@@ -677,7 +681,7 @@ float IntersectRayTriangle(void* shape, PhyRayParam *param, vec3 *q){
 
     GameObject3D *model = (GameObject3D *) shape;
 
-    vertexParam3D *vParam = &model->graphObj.shape.vParam;
+    vertexParam *vParam = &model->graphObj.shape.vParam;
     indexParam *iParam = &model->graphObj.shape.iParam;
 
     if(vParam->verticesSize < 3)
@@ -691,6 +695,8 @@ float IntersectRayTriangle(void* shape, PhyRayParam *param, vec3 *q){
     float res = 0;
     int curr = 0, num = 0, i0 = 0, i1 = 0, i2 = 0;
 
+    Vertex3D *verts = vParam->vertices;
+
     for(int i=0;i < iParam->indexesSize / 3 ;i++){
 
         curr = i * 3;
@@ -699,9 +705,9 @@ float IntersectRayTriangle(void* shape, PhyRayParam *param, vec3 *q){
         i1 = iParam->indices[curr + 1];
         i2 = iParam->indices[curr + 2];
 
-        p0 = v3_add(v3_mul(vParam->vertices[i0].position, scale), origPos);
-        p1 = v3_add(v3_mul(vParam->vertices[i1].position, scale), origPos);
-        p2 = v3_add(v3_mul(vParam->vertices[i2].position, scale), origPos);
+        p0 = v3_add(v3_mul(verts[i0].position, scale), origPos);
+        p1 = v3_add(v3_mul(verts[i1].position, scale), origPos);
+        p2 = v3_add(v3_mul(verts[i2].position, scale), origPos);
 
         if(v3_distance(p0, param->position) > param->distance + 1.0f)
             continue;

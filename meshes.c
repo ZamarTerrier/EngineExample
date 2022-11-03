@@ -40,16 +40,20 @@ void InitMeshes(){
     ToolsAddStrings(dParam.filePath, 256, path, "/textures/rabochii_i_kolhoznitca/metal_defaultMat_Diffuse.png");
     dParam.drawType = 0;
     dParam.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
-    Load3DObjModel(&teMO, objpath, dParam);
+    //Load3DObjModel(&teMO, objpath, dParam);
     //AddPhyObject(&teMO.go, PHYSICS_COLLIDER_TYPE_MESH, PHYSICS_PHYSIC_STATIC, false);
-
 
     ToolsAddStrings(objpath, 256, path, "/models/Rocket_Animated.gltf");
     ToolsAddStrings(binpath, 256, path, "/models/Rocket_Animated.bin");
     ToolsAddStrings(dParam.filePath, 256, path, "/textures/hover_board/Color.png");
+//    ToolsAddStrings(objpath, 256, path, "/models/Walking_Doctor.gltf");
+//    ToolsAddStrings(binpath, 256, path, "/models/Walking_Doctor.bin");
+//    ToolsAddStrings(dParam.filePath, 256, path, "/textures/bode1.png");
     Load3DglTFModel(&teMO2, objpath, binpath, dParam);
-    Transform3DSetRotate(&teMO2, (vec3){ 0, 0, 0 });
-    Transform3DSetScale(&teMO2, (vec3){ 1, 1, 1 });
+//    Transform3DSetRotateT(&teMO2.transform, (vec3){ -90, 0, 0 });
+//    Transform3DSetScaleT(&teMO2.transform, (vec3){ -0.01, 0.01, 0.01});
+    Transform3DSetRotateT(&teMO2.transform, (vec3){ 0, 0, 0 });
+    Transform3DSetScaleT(&teMO2.transform, (vec3){ 1, 1, 1});
     //AddPhyObject(&teMO.go, PHYSICS_COLLIDER_TYPE_MESH, PHYSICS_PHYSIC_STATIC, false);
 
     vec3 scale = {1, 1, 1};
@@ -79,16 +83,18 @@ void InitMeshes(){
 
     vec3 movePlane = {0};
 
+    Vertex3D *verts = plane.go.graphObj.shape.vParam.vertices;
+
     for(int i=0;i < plane.go.graphObj.shape.vParam.verticesSize;i++){
-        res = noise2D((plane.go.graphObj.shape.vParam.vertices[i].position.x + movePlane.x)/ maxVal, (plane.go.graphObj.shape.vParam.vertices[i].position.z + movePlane.z) / maxVal);
-        plane.go.graphObj.shape.vParam.vertices[i].position.y = res * 10;
+        res = noise2D((verts[i].position.x + movePlane.x)/ maxVal, (verts[i].position.z + movePlane.z) / maxVal);
+        verts[i].position.y = res * 10;
 
     }
 
 }
 
 void UpdateMeshes(float deltaTime){
-  Load3DglTFNextFrame(&teMO2, deltaTime);
+    Load3DglTFNextFrame(&teMO2, deltaTime);
 }
 
 void DrawMeshes(){
@@ -104,7 +110,7 @@ void DrawMeshes(){
 
 void DestroyMeshes(){
 
-    GameObjectDestroy(&teMO);
+    //GameObjectDestroy(&teMO);
     GameObjectDestroy(&teMO2);
     GameObjectDestroy(&projObj);
     GameObjectDestroy(&plane);

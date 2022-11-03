@@ -22,4 +22,4 @@ float tiker = 0;
 
 float force = 0;
 
-char path[] = "/home/ilia/Projects/Game";
+char path[] = "J:/Projects/Game";
