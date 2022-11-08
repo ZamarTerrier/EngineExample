@@ -26,7 +26,6 @@ ProjectionPlaneObject projObj;
 PrimitiveObject plane;
 
 ModelObject3D teMO;
-ModelObject3D teMO2;
 
 void InitMeshes(){
 
@@ -34,71 +33,28 @@ void InitMeshes(){
     memset(&dParam, 0, sizeof(dParam));
 
     char objpath[256];
-    char binpath[256];
 
-    ToolsAddStrings(objpath, 256, path, "/models/rabochiy_i_kolkhoznitsa_lou_poli2.obj");
-    ToolsAddStrings(dParam.filePath, 256, path, "/textures/rabochii_i_kolhoznitca/metal_defaultMat_Diffuse.png");
-    dParam.drawType = 0;
-    dParam.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
-    Load3DObjModel(&teMO, objpath, dParam);
+    ToolsAddStrings(objpath, 256, path, "/models/");
+    ToolsAddStrings(dParam.filePath, 256, path, "/textures/texture.jpg");
+    Load3DglTFModel(&teMO, objpath, "Hover_Animated", 2, dParam);
+    Transform3DSetRotateT(&teMO.transform, 0, 0, 0);
+    Transform3DSetScaleT(&teMO.transform, 0.1, 0.1, 0.1);
     //AddPhyObject(&teMO.go, PHYSICS_COLLIDER_TYPE_MESH, PHYSICS_PHYSIC_STATIC, false);
 
-
-    ToolsAddStrings(objpath, 256, path, "/models/Walking_Doctor.gltf");
-    ToolsAddStrings(binpath, 256, path, "/models/Walking_Doctor.bin");
-    ToolsAddStrings(dParam.filePath, 256, path, "/textures/bode1.png");
-    Load3DglTFModel(&teMO2, objpath, binpath, dParam);
-    Transform3DSetRotateT(&teMO2.transform, (vec3){ -90, 0, 0 });
-    Transform3DSetScaleT(&teMO2.transform, (vec3){ -0.01, 0.01, 0.01});
-    //AddPhyObject(&teMO.go, PHYSICS_COLLIDER_TYPE_MESH, PHYSICS_PHYSIC_STATIC, false);
-
-    vec3 scale = {1, 1, 1};
-    vec3 pos = {0, 0, 0};
-
-    ToolsAddStrings(dParam.filePath, 256, path, "/textures/texture.png");
-    ToolsAddStrings(dParam.vertShader, 256, path, "/shaders/ProjPlane/vert.spv");
-    ToolsAddStrings(dParam.fragShader, 256, path, "/shaders/ProjPlane/frag.spv");
-    dParam.drawType = 0;
-    dParam.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
-    ProjectionPlaneInit(&projObj.go, dParam);
-
-    scale = (vec3){1, 1, 1};
-    pos = (vec3){0, 0, 0};
     PlaneParam pParam;
-    ToolsAddStrings(dParam.filePath, 256, path, "/textures/texture.png");
-    memset(dParam.vertShader, 0, 256);
-    memset(dParam.fragShader, 0, 256);
-    dParam.drawType = 0;
-    dParam.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
-    pParam.sectorCount = 200;
-    pParam.stackCount = 200;
-    PrimitiveObjectInit(&plane, scale, pos, dParam, ENGINE_PRIMITIVE3D_PLANE, &pParam);
-    //AddPhyObject(&plane.go, PHYSICS_COLLIDER_TYPE_MESH, PHYSICS_PHYSIC_STATIC, false);
-
-    float maxVal = 30, res = 0;
-
-    vec3 movePlane = {0};
-
-    Vertex3D *verts = plane.go.graphObj.shape.vParam.vertices;
-
-    for(int i=0;i < plane.go.graphObj.shape.vParam.verticesSize;i++){
-        res = noise2D((verts[i].position.x + movePlane.x)/ maxVal, (verts[i].position.z + movePlane.z) / maxVal);
-        verts[i].position.y = res * 10;
-
-    }
+    pParam.sectorCount = 20;
+    pParam.stackCount = 20;
+    PrimitiveObjectInit(&plane, dParam, ENGINE_PRIMITIVE3D_PLANE, &pParam);
 
 }
 
 void UpdateMeshes(float deltaTime){
-    Load3DglTFNextFrame(&teMO2, deltaTime);
+    Load3DglTFNextFrame(&teMO, deltaTime, 0);
 }
 
 void DrawMeshes(){
 
-    //engDraw(&projObj);
-
-    //engDraw(&teMO);
-    engDraw(&teMO2);
+    engDraw(&teMO);
 
     engDraw(&plane);
 
@@ -107,8 +63,7 @@ void DrawMeshes(){
 void DestroyMeshes(){
 
     GameObjectDestroy(&teMO);
-    GameObjectDestroy(&teMO2);
-    GameObjectDestroy(&projObj);
+
     GameObjectDestroy(&plane);
 
 }

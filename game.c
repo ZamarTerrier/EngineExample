@@ -9,6 +9,7 @@
 
 #include "gui_test.h"
 #include "meshes.h"
+#include "sprites.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -145,35 +146,34 @@ void Init(){
     Camera2DInit(&camera2D);
     Camera3DInit(&camera3D);
 
-    InitMeshes();
+    //InitMeshes();
     GUIInit();
+    SpriteInit();
 }
 
 
 void Update(float deltaTime){
-
-
     if(lock_cursor){
         CamRotateView(deltaTime);
 
         KeyUpdateInput(deltaTime);
     }
 
-    UpdateMeshes(deltaTime);
+    //UpdateMeshes(deltaTime);
     GUIUpdate();
+    SpriteUpdate();
 }
 
 void Draw(){
-
-    DrawMeshes();
-
+    //DrawMeshes();
     GUIDraw();
-
+    SpriteDraw();
 }
 
 
 
 void CleanUp(){
-    DestroyMeshes();
+    //DestroyMeshes();
     GUIDestroy();
+    SpriteDestroy();
 }
