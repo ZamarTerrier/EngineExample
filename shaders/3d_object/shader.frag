@@ -27,10 +27,14 @@ void main() {
 
     vec4 color = texture(texSampler, fragTexCoord);
 
+<<<<<<< HEAD
     if(color.a < 0.5f)
         discard;
 
     vec3 fullColor = color.rgb * fragColor;
+=======
+    vec3 fullColor = color.rgb + fragColor;
+>>>>>>> origin/master
 
     for(int i =0;i < lbo.size;i++){
         Light light = lbo.lights[i];

@@ -9,7 +9,10 @@
 
 #include "gui_test.h"
 #include "meshes.h"
+<<<<<<< HEAD
 #include "sprites.h"
+=======
+>>>>>>> origin/master
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -146,19 +149,30 @@ void Init(){
     Camera2DInit(&camera2D);
     Camera3DInit(&camera3D);
 
+<<<<<<< HEAD
     //InitMeshes();
     GUIInit();
     SpriteInit();
+=======
+    InitMeshes();
+    GUIInit();
+>>>>>>> origin/master
 }
 
 
 void Update(float deltaTime){
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> origin/master
     if(lock_cursor){
         CamRotateView(deltaTime);
 
         KeyUpdateInput(deltaTime);
     }
 
+<<<<<<< HEAD
     //UpdateMeshes(deltaTime);
     GUIUpdate();
     SpriteUpdate();
@@ -168,12 +182,29 @@ void Draw(){
     //DrawMeshes();
     GUIDraw();
     SpriteDraw();
+=======
+    UpdateMeshes(deltaTime);
+    GUIUpdate();
+}
+
+void Draw(){
+
+    DrawMeshes();
+
+    GUIDraw();
+
+>>>>>>> origin/master
 }
 
 
 
 void CleanUp(){
+<<<<<<< HEAD
     //DestroyMeshes();
     GUIDestroy();
     SpriteDestroy();
+=======
+    DestroyMeshes();
+    GUIDestroy();
+>>>>>>> origin/master
 }

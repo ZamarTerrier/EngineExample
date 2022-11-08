@@ -67,7 +67,11 @@ void PhySetPos(PhysObj *obj, vec3 pos){
             capParam->position = pos;
             break;
         case PHYSICS_COLLIDER_TYPE_MESH:
+<<<<<<< HEAD
             Transform3DSetPosition(obj->params.obj, pos.x, pos.y, pos.z);
+=======
+            Transform3DSetPosition(obj->params.obj, pos);
+>>>>>>> origin/master
             break;
     }
 }

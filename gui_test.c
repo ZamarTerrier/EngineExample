@@ -59,7 +59,11 @@ void TempMove(EWidget* widget, void* args)
     te = v2_sub(te, mouse);
     te = v2_add(temp, te);
 
+<<<<<<< HEAD
     Transform2DSetPosition(widget, te.x, te.y);
+=======
+    Transform2DSetPosition(widget, te);
+>>>>>>> origin/master
 
 }
 
@@ -72,6 +76,7 @@ void GUIInit(){
 
     WindowWidgetInit(&window, "Temp window", size, dParam, position);
 
+<<<<<<< HEAD
     ButtonWidgetInit(&button, "Pressss", (vec4){ 0.4, 0.4, 0.4, 1.0}, &window);
     Transform2DSetPosition(&button, 0, 80);
     Transform2DSetScale(&button, 60, 20);
@@ -80,6 +85,24 @@ void GUIInit(){
     ListWidgetSetColor(&list, (vec4){0.5, 0.1, 0.1, 1.0});
     Transform2DSetPosition(&list, 200, 0);
     Transform2DSetScale(&list, 60, 170);
+=======
+    position.x = 0;
+    position.y = 80;
+    size.x = 60;
+    size.y = 20;
+    ButtonWidgetInit(&button, "Pressss", (vec4){ 0.4, 0.4, 0.4, 1.0}, &window);
+    Transform2DSetPosition(&button, position);
+    Transform2DSetScale(&button, size);
+
+    position.x = 200;
+    position.y = 0;
+    size.x = 60;
+    size.y = 170;
+    ListWidgetInit(&list, 60, 20, &window);
+    ListWidgetSetColor(&list, (vec4){0.5, 0.1, 0.1, 1.0});
+    Transform2DSetPosition(&list, position);
+    Transform2DSetScale(&list, size);
+>>>>>>> origin/master
     ListWidgetAddItem(&list, "Temp 1");
     ListWidgetAddItem(&list, "Temp 2");
     ListWidgetAddItem(&list, "Temp 3");
@@ -93,11 +116,18 @@ void GUIInit(){
     ListWidgetRemoveItem(&list, 3);
     ListWidgetRemoveItem(&list, 4);
 
+<<<<<<< HEAD
+=======
+
+    position.x = 500;
+    position.y = 0;
+>>>>>>> origin/master
     ComboboxWidgetInit(&combobox, &window);
     ComboboxWidgetAddItem(&combobox, "Temp 1");
     ComboboxWidgetAddItem(&combobox, "Temp 2");
     ComboboxWidgetAddItem(&combobox, "Temp 3");
     ComboboxWidgetAddItem(&combobox, "Temp 4");
+<<<<<<< HEAD
     Transform2DSetPosition(&combobox, 500, 0);
 
     RangeWidgetInit(&range, (vec2){60, 20}, 20, 80, &window);
@@ -120,28 +150,86 @@ void GUIInit(){
 
     Transform2DSetPosition(&el1, 0, 0);
     Transform2DSetScale(&el1, 50, 50);
+=======
+    Transform2DSetPosition(&combobox, position);
+
+    position.x = 350;
+    position.y = 50;
+    RangeWidgetInit(&range, (vec2){60, 20}, 20, 80, &window);
+    Transform2DSetPosition(&range, position);
+
+    position.x = 350;
+    position.y = 100;
+    vec2 eSize = {60, 20};
+    EntryWidgetInit(&entry, 9, &window);
+    Transform2DSetScale(&entry, eSize);
+    Transform2DSetPosition(&entry, position);
+
+    position.x = 350;
+    position.y = 200;
+    EntryWidgetInit(&entry2, 9, &window);
+    Transform2DSetScale(&entry2, eSize);
+    Transform2DSetPosition(&entry2, position);
+
+    position.x = 350;
+    position.y = 300;
+    eSize = (vec2){100, 120};
+    EntryAreaWidgetInit(&entry_area, 9, &window);
+    Transform2DSetScale(&entry_area, eSize);
+    Transform2DSetPosition(&entry_area, position);
+
+    WidgetInit(&el1, dParam, &window);
+    el1.color = (vec4){0.1, 0.8, 0.1, 1.0};
+    position.x = 0;
+    position.y = 0;
+    size.x = 50;
+    size.y = 50;
+    Transform2DSetPosition(&el1, position);
+    Transform2DSetScale(&el1, size);
+>>>>>>> origin/master
     WidgetConnect(&el1, GUI_TRIGGER_MOUSE_PRESS, TempPress, NULL);
     WidgetConnect(&el1, GUI_TRIGGER_MOUSE_MOVE, TempMove, NULL);
 
     ToolsAddStrings(dParam.filePath, 256, path, "/textures/texture.png");
     ImageWidgetInit(&img, dParam, &el1);
     img.widget.color = (vec4){1.0, 1.0, 1.0, 1.0};
+<<<<<<< HEAD
 
     Transform2DSetScale(&img, 100, 100);
+=======
+    size.x = 100;
+    size.y = 100;
+    Transform2DSetScale(&img, size);
+>>>>>>> origin/master
     memset(dParam.filePath, 0, 256);
 
     WidgetInit(&el2, dParam, &el1);
     el2.color = (vec4){0.1, 0.1, 0.3, 1.0};
+<<<<<<< HEAD
 
     Transform2DSetPosition(&el2, 0, 0);
     Transform2DSetScale(&el2, 20, 20);
+=======
+    position.x = 0;
+    position.y = 0;
+    size.x = 20;
+    size.y = 20;
+    Transform2DSetPosition(&el2, position);
+    Transform2DSetScale(&el2, size);
+>>>>>>> origin/master
     WidgetConnect(&el2, GUI_TRIGGER_MOUSE_PRESS, TempPress, NULL);
     WidgetConnect(&el2, GUI_TRIGGER_MOUSE_MOVE, TempMove, NULL);
 
     TextWidgetInit(&wt, 9,  dParam, &el2);
     wt.tData.font.color = (vec3){0.7, 0.1, 0.1};
+<<<<<<< HEAD
 
     Transform2DSetPosition(&wt, 0, 20);
+=======
+    position.x = 0;
+    position.y = 20;
+    Transform2DSetPosition(&wt, position);
+>>>>>>> origin/master
     TextWidgetSetText(&wt, "Welkome in city 17!");
 
     position.x = 0;
@@ -152,9 +240,18 @@ void GUIInit(){
 
     WidgetInit(&el3, dParam, &window2);
     el3.color = (vec4){0.1, 0.1, 0.3, 1.0};
+<<<<<<< HEAD
 
     Transform2DSetPosition(&el3, 0, 0);
     Transform2DSetScale(&el3, 20, 20);
+=======
+    position.x = 0;
+    position.y = 0;
+    size.x = 20;
+    size.y = 20;
+    Transform2DSetPosition(&el3, position);
+    Transform2DSetScale(&el3, size);
+>>>>>>> origin/master
 
     WindowWidgetHide(&window);
     WindowWidgetHide(&window2);
