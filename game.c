@@ -1,5 +1,7 @@
 #include "game.h"
 
+#include <GLFW/glfw3.h>
+
 #include "primitiveObject.h"
 #include "particleSystem.h"
 

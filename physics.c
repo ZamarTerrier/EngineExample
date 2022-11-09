@@ -28,9 +28,9 @@ vec3 moveDirGrav = {0, -1, 0};
 
 vec3 PhyGetPos(PhysObj *obj){
 
-    PhySphereParam *sphParam = (PhySphereParam *) obj->params.obj;
-    PhyAABBParam *boxParam = (PhyAABBParam *) obj->params.obj;
-    PhyCapsuleParam *capParam = (PhyCapsuleParam *) obj->params.obj;
+    InterSphereParam *sphParam = (InterSphereParam *) obj->params.obj;
+    InterAABBParam *boxParam = (InterAABBParam *) obj->params.obj;
+    InterCapsuleParam *capParam = (InterCapsuleParam *) obj->params.obj;
 
     switch(obj->collType)
     {
@@ -51,9 +51,9 @@ vec3 PhyGetPos(PhysObj *obj){
 
 void PhySetPos(PhysObj *obj, vec3 pos){
 
-    PhySphereParam *sphParam = (PhySphereParam *) obj->params.obj;
-    PhyAABBParam *boxParam = (PhyAABBParam *) obj->params.obj;
-    PhyCapsuleParam *capParam = (PhyCapsuleParam *) obj->params.obj;
+    InterSphereParam *sphParam = (InterSphereParam *) obj->params.obj;
+    InterAABBParam *boxParam = (InterAABBParam *) obj->params.obj;
+    InterCapsuleParam *capParam = (InterCapsuleParam *) obj->params.obj;
 
     switch(obj->collType)
     {
@@ -90,16 +90,16 @@ int TestCollisions(int iter){
             switch(pysics.phyObjects[j].collType)
             {
                 case PHYSICS_COLLIDER_TYPE_SPHERE:
-                    buff = TestSphereToSphere(pysics.phyObjects[iter].params.obj, pysics.phyObjects[j].params.obj, &distance, &depth, &dir);
+                    buff = IntersectionSphereToSphere(pysics.phyObjects[iter].params.obj, pysics.phyObjects[j].params.obj, &distance, &depth, &dir);
                     break;                    
                 case PHYSICS_COLLIDER_TYPE_BOX:
-                    buff = TestSphereAABB(pysics.phyObjects[iter].params.obj, pysics.phyObjects[j].params.obj, &distance, &depth, &dir);
+                    buff = IntersectionSphereAABB(pysics.phyObjects[iter].params.obj, pysics.phyObjects[j].params.obj, &distance, &depth, &dir);
                     break;
                 case PHYSICS_COLLIDER_TYPE_MESH:
-                    buff = TestSphereShape(pysics.phyObjects[iter].params.obj, pysics.phyObjects[j].params.obj, &distance, &depth, &dir);
+                    buff = IntersectionSphereShape(pysics.phyObjects[iter].params.obj, pysics.phyObjects[j].params.obj, &distance, &depth, &dir);
                     break;
                 case PHYSICS_COLLIDER_TYPE_CAPSULE:
-                    buff = TestSphereCapsule(pysics.phyObjects[iter].params.obj, pysics.phyObjects[j].params.obj, &distance, &depth, &dir);
+                    buff = IntersectionSphereCapsule(pysics.phyObjects[iter].params.obj, pysics.phyObjects[j].params.obj, &distance, &depth, &dir);
                     break;
                 default:
                     break;
@@ -109,16 +109,16 @@ int TestCollisions(int iter){
             switch(pysics.phyObjects[j].collType)
             {
                 case PHYSICS_COLLIDER_TYPE_SPHERE:
-                    buff = TestSphereCapsule(pysics.phyObjects[j].params.obj, pysics.phyObjects[iter].params.obj, &distance, &depth, &dir);
+                    buff = IntersectionSphereCapsule(pysics.phyObjects[j].params.obj, pysics.phyObjects[iter].params.obj, &distance, &depth, &dir);
                     break;
                 case PHYSICS_COLLIDER_TYPE_MESH:
-                    buff = TestCapsuleShape(pysics.phyObjects[iter].params.obj, pysics.phyObjects[j].params.obj, &distance, &depth, &dir);
+                    buff = IntersectionCapsuleShape(pysics.phyObjects[iter].params.obj, pysics.phyObjects[j].params.obj, &distance, &depth, &dir);
                     break;
                 case PHYSICS_COLLIDER_TYPE_CAPSULE:
-                    buff = TestCapsuleCapsule(pysics.phyObjects[iter].params.obj, pysics.phyObjects[j].params.obj, &distance, &depth, &dir);
+                    buff = IntersectionCapsuleCapsule(pysics.phyObjects[iter].params.obj, pysics.phyObjects[j].params.obj, &distance, &depth, &dir);
                     break;
                 case PHYSICS_COLLIDER_TYPE_BOX:
-                    buff = TestAABBCapsule(pysics.phyObjects[iter].params.obj, pysics.phyObjects[j].params.obj, &distance, &depth, &dir);
+                    buff = IntersectionAABBCapsule(pysics.phyObjects[iter].params.obj, pysics.phyObjects[j].params.obj, &distance, &depth, &dir);
                     break;
                 default:
                     break;
@@ -128,16 +128,16 @@ int TestCollisions(int iter){
             switch(pysics.phyObjects[j].collType)
             {
                 case PHYSICS_COLLIDER_TYPE_SPHERE:
-                    buff = TestSphereAABB(pysics.phyObjects[j].params.obj, pysics.phyObjects[iter].params.obj, &distance, &depth, &dir);
+                    buff = IntersectionSphereAABB(pysics.phyObjects[j].params.obj, pysics.phyObjects[iter].params.obj, &distance, &depth, &dir);
                     break;
                 case PHYSICS_COLLIDER_TYPE_MESH:
-                    //buff = TestSphereShape(pysics.phyObjects[iter].params.obj, pysics.phyObjects[j].params.obj, &distance, &depth, &dir);
+                    //buff = IntersectionSphereShape(pysics.phyObjects[iter].params.obj, pysics.phyObjects[j].params.obj, &distance, &depth, &dir);
                     break;
                 case PHYSICS_COLLIDER_TYPE_CAPSULE:
-                    buff = TestAABBCapsule(pysics.phyObjects[j].params.obj, pysics.phyObjects[iter].params.obj, &distance, &depth, &dir);
+                    buff = IntersectionAABBCapsule(pysics.phyObjects[j].params.obj, pysics.phyObjects[iter].params.obj, &distance, &depth, &dir);
                     break;
                 case PHYSICS_COLLIDER_TYPE_BOX:
-                    buff = TestAABBAABB(pysics.phyObjects[iter].params.obj, pysics.phyObjects[j].params.obj, &distance, &depth, &dir);
+                    buff = IntersectionAABBAABB(pysics.phyObjects[iter].params.obj, pysics.phyObjects[j].params.obj, &distance, &depth, &dir);
                     break;
                 default:
                     break;
@@ -249,7 +249,7 @@ void WorldSetGraviry(float gravity){
     worldGravity = gravity;
 }
 
-float TestIntersectRay(PhyRayParam *ray, vec3 *q){
+float TestIntersectRay(InterRayParam *ray, vec3 *q){
 
     int doit = 1;
     float result = 0, tmax = 0, lastResult = 0;
@@ -259,9 +259,9 @@ float TestIntersectRay(PhyRayParam *ray, vec3 *q){
 
     for(int i=0; i < pysics.phyObjectsCount; i++){
 
-        PhySphereParam *sphParam = (PhySphereParam *) pysics.phyObjects[i].params.obj;
-        PhyAABBParam *boxParam = (PhyAABBParam *) pysics.phyObjects[i].params.obj;
-        PhyCapsuleParam *capParam = (PhyCapsuleParam *) pysics.phyObjects[i].params.obj;
+        InterSphereParam *sphParam = (InterSphereParam *) pysics.phyObjects[i].params.obj;
+        InterAABBParam *boxParam = (InterAABBParam *) pysics.phyObjects[i].params.obj;
+        InterCapsuleParam *capParam = (InterCapsuleParam *) pysics.phyObjects[i].params.obj;
 
         if(pysics.phyObjects[i].collType == PHYSICS_COLLIDER_TYPE_SPHERE)
             doit = IntersectRaySphere(ray, sphParam->center, &result, &temp);

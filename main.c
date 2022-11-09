@@ -15,13 +15,13 @@ void Run(){
     double lastTime = 0;
     int nbFrames = 0;
 
-    while(!glfwWindowShouldClose(e_window)){
-        double startTime = glfwGetTime();
-        glfwPollEvents();
+    while(!EngineWindowIsClosed()){
+        double startTime = EngineGetTime();
+        EnginePoolEvents();
         Update(dTime);
         Draw();
         engineLoop();
-        double endTime = glfwGetTime();
+        double endTime = EngineGetTime();
 
         //Вычисление потенциала обновления кадров, для дальнейшего использования
         dTime = startTime - endTime;        
@@ -35,7 +35,7 @@ void Run(){
             sleep(time_to_sleep);
         }
 
-        double curr_time = glfwGetTime();
+        double curr_time = EngineGetTime();
 
         nbFrames++;
         if (curr_time - lastTime > 1.0f ){
@@ -45,7 +45,7 @@ void Run(){
         }
     }
 
-    vkDeviceWaitIdle(device);
+    EngineDeviceWaitIdle();
 }
 
 int main(){
