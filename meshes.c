@@ -19,8 +19,6 @@
 
 #include "physics.h"
 
-TextObject* interText;
-
 ProjectionPlaneObject projObj;
 
 PrimitiveObject plane;

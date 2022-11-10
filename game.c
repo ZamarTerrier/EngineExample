@@ -164,7 +164,7 @@ void Update(float deltaTime){
 
     //UpdateMeshes(deltaTime);
     GUIUpdate();
-    SpriteUpdate();
+    SpriteUpdate(deltaTime);
 }
 
 void Draw(){

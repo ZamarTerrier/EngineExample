@@ -249,7 +249,7 @@ void WorldSetGraviry(float gravity){
     worldGravity = gravity;
 }
 
-float TestIntersectRay(InterRayParam *ray, vec3 *q){
+float TestIntersectRay(InterRay3DParam *ray, vec3 *q){
 
     int doit = 1;
     float result = 0, tmax = 0, lastResult = 0;
@@ -264,17 +264,17 @@ float TestIntersectRay(InterRayParam *ray, vec3 *q){
         InterCapsuleParam *capParam = (InterCapsuleParam *) pysics.phyObjects[i].params.obj;
 
         if(pysics.phyObjects[i].collType == PHYSICS_COLLIDER_TYPE_SPHERE)
-            doit = IntersectRaySphere(ray, sphParam->center, &result, &temp);
+            doit = Intersect3DRaySphere(ray, sphParam->center, &result, &temp);
         else if(pysics.phyObjects[i].collType == PHYSICS_COLLIDER_TYPE_BOX){
             vec3 top_left = {boxParam->size, boxParam->size, boxParam->size};
-            doit = IntersectRayAABB(ray, v3_sub(boxParam->position, top_left), v3_add(boxParam->position, top_left), &result, &tmax, &temp);
+            doit = Intersect3DRayAABB(ray, v3_sub(boxParam->position, top_left), v3_add(boxParam->position, top_left), &result, &tmax, &temp);
         }
         else if(pysics.phyObjects[i].collType == PHYSICS_COLLIDER_TYPE_CAPSULE){
             vec3 up = {0, capParam->height, 0};
-            doit = IntersectSegmentCylinder(ray, v3_sub(capParam->position, up), v3_add(capParam->position, up), capParam->radius, &result, &temp);
+            doit = Intersect3DSegmentCylinder(ray, v3_sub(capParam->position, up), v3_add(capParam->position, up), capParam->radius, &result, &temp);
         }
         else if(pysics.phyObjects[i].collType == PHYSICS_COLLIDER_TYPE_MESH)
-            result = IntersectRayTriangle(pysics.phyObjects[i].params.obj, ray, &temp);
+            result = Intersect3DRayTriangle(pysics.phyObjects[i].params.obj, ray, &temp);
 
         if(result > 0 && lastResult == 0 && doit)
         {

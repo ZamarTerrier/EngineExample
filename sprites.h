@@ -2,7 +2,7 @@
 #define SPRITES_H
 
 void SpriteInit();
-void SpriteUpdate();
+void SpriteUpdate(float deltaTime);
 void SpriteDraw();
 void SpriteDestroy();
 

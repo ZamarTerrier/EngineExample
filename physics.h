@@ -3,7 +3,7 @@
 
 #include "gameObject3D.h"
 
-#include "stdinclude.h"
+#include "engine_includes.h"
 
 #include "rayIntersections3D.h"
 #include "intersections3D.h"
@@ -37,7 +37,7 @@ typedef struct{
 
 void InitPhys();
 
-float TestIntersectRay(InterRayParam *ray, vec3 *q);
+float TestIntersectRay(InterRay3DParam *ray, vec3 *q);
 
 int TestHandfullcollisions();
 void WorldStep();
