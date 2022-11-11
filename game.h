@@ -3,8 +3,6 @@
 
 #include "engine.h"
 
-#include "e_math.h"
-
 extern int fpsCounter;
 
 void Init();

@@ -1,7 +1,7 @@
 #ifndef GUI_TEST_H
 #define GUI_TEST_H
 
-#include "stdinclude.h"
+#include "engine_includes.h"
 
 void GUIInit();
 void GUIUpdate();

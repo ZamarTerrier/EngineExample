@@ -1,5 +1,7 @@
 #include "meshes.h"
 
+#include "engine.h"
+
 #include "resource.h"
 
 #include "textObject.h"
@@ -7,6 +9,9 @@
 #include "gameObject3D.h"
 #include "primitiveObject.h"
 #include "projectionPlaneObject.h"
+
+#include "lightObject.h"
+
 #include "objLoader.h"
 #include "fbxLoader.h"
 #include "glTFLoader.h"
@@ -19,14 +24,15 @@
 
 #include "physics.h"
 
-TextObject* interText;
-
 ProjectionPlaneObject projObj;
 
 PrimitiveObject plane;
+PrimitiveObject l_object;
 
 ModelObject3D teMO;
-ModelObject3D teMO2;
+
+LightObject light;
+LightObject dir;
 
 void InitMeshes(){
 
@@ -34,15 +40,18 @@ void InitMeshes(){
     memset(&dParam, 0, sizeof(dParam));
 
     char objpath[256];
-    char binpath[256];
 
-    ToolsAddStrings(objpath, 256, path, "/models/rabochiy_i_kolkhoznitsa_lou_poli2.obj");
-    ToolsAddStrings(dParam.filePath, 256, path, "/textures/rabochii_i_kolhoznitca/metal_defaultMat_Diffuse.png");
-    dParam.drawType = 0;
-    dParam.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
-    Load3DObjModel(&teMO, objpath, dParam);
+    ToolsAddStrings(dParam.diffuse, 256, path, "/textures/texture.jpg");
+    ToolsAddStrings(dParam.specular, 256, path, "/textures/specular.png");
+    ToolsAddStrings(dParam.normal, 256, path, "/textures/normal_map.png");
+
+    ToolsAddStrings(objpath, 256, path, "/models/");
+    Load3DglTFModel(&teMO, objpath, "Hover_Animated", 2, dParam);
+    Transform3DSetRotateT(&teMO.transform, 0, 0, 0);
+    Transform3DSetScaleT(&teMO.transform, 0.1, 0.1, 0.1);
     //AddPhyObject(&teMO.go, PHYSICS_COLLIDER_TYPE_MESH, PHYSICS_PHYSIC_STATIC, false);
 
+<<<<<<< HEAD
     ToolsAddStrings(objpath, 256, path, "/models/Hover_Rocket.gltf");
     ToolsAddStrings(binpath, 256, path, "/models/Hover_Rocket.bin");
     ToolsAddStrings(dParam.filePath, 256, path, "/textures/hover_board/Color.png");
@@ -68,51 +77,72 @@ void InitMeshes(){
 
     scale = (vec3){1, 1, 1};
     pos = (vec3){0, 0, 0};
+=======
+>>>>>>> 4fe935e8e574a50cceb42ea9ade63af9ec091ba4
     PlaneParam pParam;
-    ToolsAddStrings(dParam.filePath, 256, path, "/textures/texture.png");
-    memset(dParam.vertShader, 0, 256);
-    memset(dParam.fragShader, 0, 256);
-    dParam.drawType = 0;
-    dParam.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
-    pParam.sectorCount = 200;
-    pParam.stackCount = 200;
-    PrimitiveObjectInit(&plane, scale, pos, dParam, ENGINE_PRIMITIVE3D_PLANE, &pParam);
-    //AddPhyObject(&plane.go, PHYSICS_COLLIDER_TYPE_MESH, PHYSICS_PHYSIC_STATIC, false);
+    pParam.sectorCount = 20;
+    pParam.stackCount = 20;
+    PrimitiveObjectInit(&plane, dParam, ENGINE_PRIMITIVE3D_PLANE, &pParam);
+    Transform3DSetPosition(&plane, 0, 0, 0);
 
-    float maxVal = 30, res = 0;
+    SphereParam sParam;
+    sParam.radius = 0.1f;
+    sParam.sectorCount = 10;
+    sParam.stackCount = 10;
+    PrimitiveObjectInit(&l_object, dParam, ENGINE_PRIMITIVE3D_SPHERE, &sParam);
+    l_object.go.enable_light = 0;
 
-    vec3 movePlane = {0};
+    LightObjectInit(&light, ENGINE_LIGHT_TYPE_POINT);
+    LightObjectSetPosition(&light, 1, 1, 1);
+    LightObjectSetAmbientColor(&light, 0.1f, 0.1f, 0.1f);
+    LightObjectSetDiffuseColor(&light, 0.1f, 0.1f, 0.1f);
+    LightObjectSetSpecularColor(&light, 0.1f, 0.1f, 0.1f);
 
-    Vertex3D *verts = plane.go.graphObj.shape.vParam.vertices;
 
-    for(int i=0;i < plane.go.graphObj.shape.vParam.verticesSize;i++){
-        res = noise2D((verts[i].position.x + movePlane.x)/ maxVal, (verts[i].position.z + movePlane.z) / maxVal);
-        verts[i].position.y = res * 10;
+    LightObjectInit(&dir, ENGINE_LIGHT_TYPE_DIRECTIONAL);
+    LightObjectSetDirection(&dir, 0, -1.0f, 1.0f);
+    LightObjectSetAmbientColor(&dir, 0.1f, 0.1f, 0.1f);
+    LightObjectSetDiffuseColor(&dir, 0.1f, 0.1f, 0.1f);
+    LightObjectSetSpecularColor(&dir, 0.1f, 0.1f, 0.1f);
 
-    }
+    light.constant = 1.0f;
 
 }
 
 void UpdateMeshes(float deltaTime){
-    Load3DglTFNextFrame(&teMO2, deltaTime);
+    Load3DglTFNextFrame(&teMO, deltaTime, 0);
+
+    double time = EngineGetTime();
+
+    float x = (cos(time) + 1) * 4;
+    float y = 1;
+    float z = (sin(time) + 1) * 4;
+
+    LightObjectSetPosition(&light, x, y, z);
+
+    Transform3DSetPosition(&l_object, x, y, z);
 }
 
 void DrawMeshes(){
 
-    //engDraw(&projObj);
+    LightObjectDraw(&light);
+//    LightObjectDraw(&dir);
 
     engDraw(&teMO);
+<<<<<<< HEAD
     engDraw(&teMO2);
+=======
+>>>>>>> 4fe935e8e574a50cceb42ea9ade63af9ec091ba4
 
     engDraw(&plane);
+    engDraw(&l_object);
 
 }
 
 void DestroyMeshes(){
 
     GameObjectDestroy(&teMO);
-    GameObjectDestroy(&teMO2);
-    GameObjectDestroy(&projObj);
     GameObjectDestroy(&plane);
+    GameObjectDestroy(&l_object);
 
 }

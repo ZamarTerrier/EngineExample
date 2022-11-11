@@ -22,7 +22,7 @@ void main() {
 
     fragColor = color;
     fragTexCoord = inTexCoord;
-    fragPos =mbo.model * vec4(position, 1.0);
+    fragPos = mbo.model * vec4(position, 1.0);
     fragNormal = mbo.model * vec4(normal, 0.0);
     gl_PointSize = 10.0f;
 }
