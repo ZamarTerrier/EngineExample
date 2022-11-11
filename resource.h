@@ -11,6 +11,7 @@ extern Camera3D camera3D;
 extern bool lock_cursor;
 extern bool walk, jump, grounded, leftMouse;
 extern bool esc_press;
+extern bool showconsole;
 
 extern int fpsCounter;
 

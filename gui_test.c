@@ -126,12 +126,12 @@ void GUIInit(){
     WidgetConnect(&el1, GUI_TRIGGER_MOUSE_PRESS, TempPress, NULL);
     WidgetConnect(&el1, GUI_TRIGGER_MOUSE_MOVE, TempMove, NULL);
 
-    ToolsAddStrings(dParam.filePath, 256, path, "/textures/texture.png");
+    ToolsAddStrings(dParam.diffuse, 256, path, "/textures/texture.png");
     ImageWidgetInit(&img, dParam, &el1);
     img.widget.color = (vec4){1.0, 1.0, 1.0, 1.0};
     Transform2DSetScale(&img, 100, 100);
 
-    memset(dParam.filePath, 0, 256);
+    memset(dParam.diffuse, 0, 256);
 
     WidgetInit(&el2, dParam, &el1);
     el2.color = (vec4){0.1, 0.1, 0.3, 1.0};

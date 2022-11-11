@@ -6,6 +6,7 @@ Camera3D camera3D;
 bool lock_cursor = true;
 bool walk = false, jump = false, grounded = false, leftMouse = false;
 bool esc_press = false;
+bool showconsole = false;
 
 int fpsCounter = 0;
 

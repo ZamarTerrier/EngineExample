@@ -47,7 +47,7 @@ void SpriteInit()
     TextObjectInit(&interText, 9, font);
 
     DrawParam dParam;
-    ToolsAddStrings(dParam.filePath, 256, path, "/textures/texture.jpg");
+    ToolsAddStrings(dParam.diffuse, 256, path, "/textures/texture.jpg");
 
     vec2 positions[] = {
         {20, 20},
