@@ -161,8 +161,8 @@ void GUIInit(){
     Transform2DSetPosition(&el3, 0, 0);
     Transform2DSetScale(&el3, 20, 20);
 
-    WindowWidgetHide(&window);
-    WindowWidgetHide(&window2);
+    //WindowWidgetHide(&window);
+    //WindowWidgetHide(&window2);
 }
 
 

@@ -146,7 +146,7 @@ void main() {
             normal = normalize(fragNormal.xyz);
         else
             // transform normal vector to range [-1,1]
-            normal = normalize(normal * 0.5 + 0.5);
+            normal = normalize(normal * 2.0 - 1.0);
 
         fullColor += CalcDirLight(lbo.dir, normal, fragPos.xyz);
 

@@ -17,6 +17,7 @@ SpriteObject sprite;
 AudioObject audio;
 ShapeObject obj1;
 ShapeObject obj2;
+ShapeObject obj3;
 
 TextObject interText;
 
@@ -67,11 +68,17 @@ void SpriteInit()
     circle.radius = 100;
     circle.freq = 20;
 
+    ShapeParams shape;
+    shape.positions = positions;
+    shape.color = (vec3){1, 1, 1};
+    shape.num_positions = 5;
 
     ShapeObjectInit(&obj1, dParam, ENGINE_SHAPE_OBJECT_CIRCLE, &circle);
     Transform2DSetPosition(&obj1, 300, 300);
     ShapeObjectInit(&obj2, dParam, ENGINE_SHAPE_OBJECT_QUAD, &quad);
     Transform2DSetPosition(&obj2, 300, 300);
+    ShapeObjectInit(&obj3, dParam, ENGINE_SHAPE_OBJECT_SHAPE, &shape);
+    Transform2DSetPosition(&obj3, 300, 300);
 
 }
 
@@ -149,6 +156,7 @@ void SpriteDraw()
 
     engDraw(&obj1);
     engDraw(&obj2);
+    engDraw(&obj3);
 
     engDraw(&interText);
 }
@@ -160,6 +168,7 @@ void SpriteDestroy()
 
     GameObjectDestroy(&obj1);
     GameObjectDestroy(&obj2);
+    GameObjectDestroy(&obj3);
 
     GameObjectDestroy(&interText);
 

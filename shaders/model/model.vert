@@ -26,18 +26,11 @@ layout(location = 3) out vec4 fragNormal;
 void main() {
 
     mat4 model = mbo.model;
-<<<<<<< HEAD
-    mat4 skinMat = weight.x * mato.mats[int(joints.x)] +  weight.y * mato.mats[int(joints.y)] + weight.z * mato.mats[int(joints.z)] + weight.w * mato.mats[int(joints.w)];
-
-    if(mato.size > 0)
-        model = model * skinMat;
-=======
 
     mat4 skinMat = weight.x * mato.mats[int(joints.x)] +  weight.y * mato.mats[int(joints.y)] + weight.z * mato.mats[int(joints.z)] + weight.w * mato.mats[int(joints.w)];
 
     if(mato.size > 0)
         model = skinMat * mbo.model;
->>>>>>> 4fe935e8e574a50cceb42ea9ade63af9ec091ba4
 
     gl_Position = mbo.proj * mbo.view * model * vec4(position, 1.0);
 

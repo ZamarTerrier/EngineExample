@@ -16,6 +16,8 @@ obj = bin/fonts/fantazer-normal.o \
 	bin/shaders/sprite/vert.o \
 	bin/shaders/3d_object/frag.o \
 	bin/shaders/3d_object/vert.o \
+	bin/shaders/particle/frag.o \
+	bin/shaders/particle/vert.o \
 
 all: clean $(obj) cpy
 
@@ -33,6 +35,9 @@ bin/shaders/text/%.o : shaders/text/%.spv
 	ld -r -b binary $< -o $@
 	
 bin/shaders/sprite/%.o : shaders/sprite/%.spv
+	ld -r -b binary $< -o $@
+	
+bin/shaders/particle/%.o : shaders/particle/%.spv
 	ld -r -b binary $< -o $@
 
 bin/fonts/%.o : fonts/%.ttf

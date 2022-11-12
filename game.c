@@ -18,7 +18,7 @@ void Init(){
 
     InitMeshes();
     GUIInit();
-    //SpriteInit();
+    SpriteInit();
 }
 
 
@@ -27,7 +27,7 @@ void Update(float deltaTime){
     SysUpdate(deltaTime);
     UpdateMeshes(deltaTime);
     //GUIUpdate();
-    //SpriteUpdate(deltaTime);
+    SpriteUpdate(deltaTime);
 }
 
 void Draw(){
