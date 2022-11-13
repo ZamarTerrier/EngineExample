@@ -26,6 +26,8 @@
 
 #include "physics.h"
 
+#include "e_audioObject.h"
+
 ProjectionPlaneObject projObj;
 
 ParticleObject3D particle;
@@ -37,6 +39,10 @@ PrimitiveObject skybox;
 ModelObject3D teMO;
 
 LightObject light;
+
+AudioObject audio;
+
+TextObject interText;
 
 float timer;
 
@@ -88,6 +94,17 @@ void InitMeshes(){
     ToolsAddStrings(dParam.diffuse, 256, path, "/textures/bubble2.png");
     Particle3DInit(&particle, dParam);
 
+    AudioObjectInit(&audio);
+
+    char buff[256];
+    ToolsAddStrings(buff, 256, path, "/sounds/jump.wav");
+    AudioObjectLoadFile(&audio, buff);
+    audio.volume = 0.1f;
+
+    char font[256];
+    ToolsAddStrings(font, 256, path, "/fonts/arial.ttf");
+    TextObjectInit(&interText, 9, font);
+
 }
 
 void UpdateMeshes(float deltaTime){
@@ -124,6 +141,11 @@ void UpdateMeshes(float deltaTime){
         timer = 0;
     }else
         timer += 0.1f;
+
+
+    AudioObjectSetSourcePosition3D(&audio, Transform3DGetPosition(&l_object));
+    AudioObjectPlaySound(&audio, 0);
+
 }
 
 void DrawMeshes(){
@@ -138,6 +160,7 @@ void DrawMeshes(){
 
     engDraw(&particle);
 
+    engDraw(&interText);
 }
 
 void DestroyMeshes(){
@@ -147,4 +170,8 @@ void DestroyMeshes(){
     GameObjectDestroy(&l_object);
     GameObjectDestroy(&skybox);
     GameObjectDestroy(&particle);
+
+    AudioObjectDestroy(&audio);
+
+    GameObjectDestroy(&interText);
 }

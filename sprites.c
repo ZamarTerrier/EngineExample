@@ -2,7 +2,6 @@
 
 #include "engine.h"
 
-#include "e_audioObject.h"
 #include "textObject.h"
 #include "spriteObject.h"
 #include "shapeObject.h"
@@ -14,12 +13,9 @@
 #include "math.h"
 
 SpriteObject sprite;
-AudioObject audio;
 ShapeObject obj1;
 ShapeObject obj2;
 ShapeObject obj3;
-
-TextObject interText;
 
 float x = 0, y = 0;
 float o_x = 0, o_y = 50;
@@ -37,16 +33,6 @@ void SpriteInit()
     Transform2DSetImageScale(&sprite, 48, 48);
     Transform2DSetImageOffset(&sprite, o_x, o_y);
 
-    AudioObjectInit(&audio);
-
-    char buff[256];
-    ToolsAddStrings(buff, 256, path, "/sounds/jump.wav");
-    AudioObjectLoadFile(&audio, buff);
-    audio.volume = 0.1f;
-
-    char font[256];
-    ToolsAddStrings(font, 256, path, "/fonts/arial.ttf");
-    TextObjectInit(&interText, 9, font);
 
     DrawParam dParam;
     ToolsAddStrings(dParam.diffuse, 256, path, "/textures/texture.jpg");
@@ -112,12 +98,7 @@ void AnimSprite(float deltaTime)
         time = 0;
     }
 
-    float pan = sin(EngineGetTime());
-    float vol = (cos(EngineGetTime()) + 1.0f) / 2.f;
 
-    AudioObjectSetPan(&audio, pan);
-    AudioObjectSetVolume(&audio, vol);
-    AudioObjectPlaySound(&audio, 0);
 }
 
 void SpriteUpdate(float deltaTime)
@@ -149,13 +130,6 @@ void SpriteUpdate(float deltaTime)
 
     int res = IntersectionCircleSquare(&param1, &param2, &dist, &depth, &dir);
 
-    char buff[256];
-    sprintf(buff, " Result : %i \n"
-                  " Pos x : %f | y : %f \n", res, mX, mY);
-
-    TextObjectSetText(buff, &interText);
-
-
 }
 
 void SpriteDraw()
@@ -165,8 +139,6 @@ void SpriteDraw()
     engDraw(&obj1);
     engDraw(&obj2);
     engDraw(&obj3);
-
-    engDraw(&interText);
 }
 
 
@@ -177,8 +149,4 @@ void SpriteDestroy()
     GameObjectDestroy(&obj1);
     GameObjectDestroy(&obj2);
     GameObjectDestroy(&obj3);
-
-    GameObjectDestroy(&interText);
-
-    AudioObjectDestroy(&audio);
 }
