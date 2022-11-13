@@ -3,7 +3,7 @@
 Camera2D camera2D;
 Camera3D camera3D;
 
-bool lock_cursor = true;
+bool lock_cursor = false;
 bool walk = false, jump = false, grounded = false, leftMouse = false;
 bool esc_press = false;
 bool showconsole = false;

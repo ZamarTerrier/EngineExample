@@ -41,7 +41,8 @@ void SpriteInit()
 
     char buff[256];
     ToolsAddStrings(buff, 256, path, "/sounds/jump.wav");
-    //AudioObjectJustPlaySound(&audio, buff);
+    AudioObjectLoadFile(&audio, buff);
+    audio.volume = 0.1f;
 
     char font[256];
     ToolsAddStrings(font, 256, path, "/fonts/arial.ttf");
@@ -110,6 +111,13 @@ void AnimSprite(float deltaTime)
 
         time = 0;
     }
+
+    float pan = sin(EngineGetTime());
+    float vol = (cos(EngineGetTime()) + 1.0f) / 2.f;
+
+    AudioObjectSetPan(&audio, pan);
+    AudioObjectSetVolume(&audio, vol);
+    AudioObjectPlaySound(&audio, 0);
 }
 
 void SpriteUpdate(float deltaTime)

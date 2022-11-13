@@ -120,7 +120,8 @@ void CamRotateView(float deltaTime){
 void SysInit()
 {
 
-    EngineHideCursor(1);
+    if(lock_cursor)
+        EngineHideCursor(1);
 
     EngineSetKeyCallback((void *)KeyCallback);
     EngineSetMouseKeyCallback((void *)MouseKeyCallback);
