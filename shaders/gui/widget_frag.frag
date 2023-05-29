@@ -1,0 +1,85 @@
+#version 450
+
+float PI = 3.14159265359;
+
+#define MAX_MASKS_OBJECTS 64
+
+struct ObjectParams{
+    vec2 position;
+    vec2 size;
+};
+
+layout(binding = 0) uniform GUIBuffer{
+    vec2 offset;
+    vec2 position;
+    vec2 size;
+    vec4 color;
+    float transparent;
+} guib;
+
+layout(binding = 1) uniform MaskObjectsBuffer{
+    ObjectParams objs[MAX_MASKS_OBJECTS];
+    int size;
+} mob;
+
+layout(binding = 2) uniform sampler2D diffuse;
+
+layout(location = 0) in vec3 fragColor;
+layout(location = 1) in vec2 fragTexCoord;
+
+layout(location = 0) out vec4 outColor;
+
+float sdBox( vec2 p, vec2 off,  vec2 b)
+{
+    float radius = 0.005f;
+
+    vec2 org = p - (off + b);
+    vec2 d = abs(org)-b + radius;
+    float outsideDistance = length(max(d, 0));
+    float insideDistance = min(max(d.x, d.y), 0);
+    return outsideDistance + insideDistance - radius;
+}
+
+float guiScene(vec2 center){
+    return sdBox(center, guib.position, guib.size);
+}
+
+void main(void)
+{
+
+    //Getting camera properties from buffer
+
+    vec4 diffColor = texture(diffuse, (fragTexCoord - guib.position) / guib.size / 2);
+
+    if(diffColor.a < 0.5)
+        diffColor = vec4(1);
+
+   float d = guiScene(fragTexCoord);
+
+   vec4 color = vec4(0);
+
+   if(d > 0)
+   {
+        discard;
+   }
+   else
+   {
+        for(int i=0; i < mob.size;i++){
+           float d2 = sdBox(fragTexCoord, mob.objs[i].position, mob.objs[i].size);
+           if(d2 > 0)
+               discard;
+
+           //d = d2;
+       }
+
+        float mul = abs(d * 300);
+
+        if(mul > 2.0f)
+            mul = 2.0f;
+
+       color = guib.color * mul;
+   }
+
+    outColor = vec4(diffColor * color);
+    outColor.a = guib.transparent;
+}
