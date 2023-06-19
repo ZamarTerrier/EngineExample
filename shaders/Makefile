@@ -42,6 +42,8 @@ obj = \
         tree/vert.spv \
         tree/sdf_frag.spv \
         tree/sdf_vert.spv \
+        tree/instance_frag.spv \
+        tree/instance_vert.spv \
         sky/sky_frag.spv \
         sky/sky_vert.spv \
         sky/stars_frag.spv \
@@ -52,6 +54,8 @@ obj = \
         3d_object/vert.spv \
         3d_object/shadow_frag.spv \
         3d_object/shadow_vert.spv \
+        3d_object/instance_frag.spv \
+        3d_object/instance_vert.spv \
         3d_object/line_frag.spv \
         3d_object/line_vert.spv \
         particle/frag2D.spv \
@@ -71,6 +75,12 @@ all: $(obj)
 	glslc $< -o $@
 
 3d_object/vert.spv : 3d_object/shader.vert
+	glslc $< -o $@
+
+3d_object/instance_frag.spv : 3d_object/shader_instance.frag
+	glslc $< -o $@
+
+3d_object/instance_vert.spv : 3d_object/shader_instance.vert
 	glslc $< -o $@
 
 3d_object/shadow_frag.spv : 3d_object/shader_shadow.frag
@@ -209,6 +219,12 @@ tree/sdf_frag.spv : tree/shader_sdf.frag
 	glslc $< -o $@
 
 tree/sdf_vert.spv : tree/shader_sdf.vert
+	glslc $< -o $@
+
+tree/instance_frag.spv : tree/shader_instance.frag
+	glslc $< -o $@
+
+tree/instance_vert.spv : tree/shader_instance.vert
 	glslc $< -o $@
 
 default/frag2D.spv : default/shader2D.frag

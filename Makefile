@@ -39,6 +39,8 @@ obj = bin/fonts/fantazer-normal.o \
 	bin/shaders/terrain/shadow_vert.o \
 	bin/shaders/tree/frag.o \
 	bin/shaders/tree/vert.o \
+	bin/shaders/tree/instance_frag.o \
+	bin/shaders/tree/instance_vert.o \
 	bin/shaders/tree/sdf_frag.o \
 	bin/shaders/tree/sdf_vert.o \
 	bin/shaders/default/frag2D.o \
@@ -53,6 +55,8 @@ obj = bin/fonts/fantazer-normal.o \
 	bin/shaders/sky/atmospheric_vert.o \
 	bin/shaders/3d_object/frag.o \
 	bin/shaders/3d_object/vert.o \
+	bin/shaders/3d_object/instance_frag.o \
+	bin/shaders/3d_object/instance_vert.o \
 	bin/shaders/3d_object/shadow_frag.o \
 	bin/shaders/3d_object/shadow_vert.o \
 	bin/shaders/3d_object/line_frag.o \
