@@ -5,6 +5,7 @@
 #include "game_sys.h"
 #include "gui_test.h"
 #include "meshes.h"
+#include "landscape.h"
 #include "sprites.h"
 #include "painter.h"
 
@@ -28,7 +29,7 @@ void Init(){
     Camera3DInit(&camera3D);
 
     RenderTextureInit(&render_window, ENGINE_RENDER_TYPE_WINDOW, 0, 0, 0);
-    render_window.persp_view_distance = 2000;
+    render_window.persp_view_distance = 10000;
 
     for (uint32_t i = 0; i < MAX_SOME_SHADOWS; i++)
         RenderTextureInit(&render_shadow[i], ENGINE_RENDER_TYPE_DEPTH, 2048, 2048, 0);
@@ -58,7 +59,8 @@ void Init(){
     SysInit();
     SysCalcDirLight();
 
-    InitMeshes();
+    //InitMeshes();
+    InitLandscape();
     //SpriteInit();
     //GUIInit();
     //PainterInit();
@@ -108,7 +110,8 @@ void UpdateCascades(float deltaTime)
 void Update(double deltaTime){
 
     SysUpdate(deltaTime);
-    UpdateMeshes(deltaTime);
+    //UpdateMeshes(deltaTime);
+    UpdateLandscape(deltaTime);
     //SpriteUpdate(deltaTime);
     //GUIUpdate();
     //PainterUpdate();
@@ -118,7 +121,8 @@ void Update(double deltaTime){
 
 void Draw(){
 
-    DrawMeshes();
+    //DrawMeshes();
+    DrawLandscape();
     //SpriteDraw();
     //GUIDraw();
     //PainterDraw();
@@ -135,7 +139,8 @@ void Draw(){
 
 
 void CleanUp(){
-    DestroyMeshes();
+    //DestroyMeshes();
+    DestroyLandscape();
     //SpriteDestroy();
     //GUIDestroy();
     //PainterDestroy();

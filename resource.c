@@ -17,7 +17,7 @@ float pitch = 0;
 
 float moveSpeed = 2.0f;
 
-float cameraSpeed = 4.5f;
+float cameraSpeed = 3.5f;
 float sensitivity = 2.0f;
 
 float speed = 100;

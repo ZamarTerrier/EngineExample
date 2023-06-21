@@ -58,7 +58,8 @@ void main()
 
         outNormal = inNormal * mat3(rotMat);
 
-        vec4 pos = vec4((inPos.xyz * instanceScale) + instancePos, 1.0) * rotMat;
+        vec4 pos = vec4(inPos.xyz * instanceScale, 1.0) * rotMat;
+        pos.xyz += instancePos;
 
         gl_Position = mbo.proj * mbo.view * mbo.model * pos;
 

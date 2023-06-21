@@ -13,5 +13,8 @@ void main()
 {
     vec4 color = texture(diffuse, inUV);
 
+    if(color.a < 0.8)
+        discard;
+
     outFragColor = vec4(color.rgb, 1.0);
 }

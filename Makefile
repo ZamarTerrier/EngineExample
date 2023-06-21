@@ -65,6 +65,8 @@ obj = bin/fonts/fantazer-normal.o \
 	bin/shaders/particle/vert2D.o \
 	bin/shaders/particle/frag3D.o \
 	bin/shaders/particle/vert3D.o \
+	bin/shaders/water/frag.o \
+	bin/shaders/water/vert.o \
 
 all: 
 	cd shaders && $(MAKE)
@@ -116,6 +118,9 @@ bin/shaders/quad/%.o : shaders/quad/%.spv
 	ld -r -b binary $< -o $@
 
 bin/shaders/geometry/%.o : shaders/geometry/%.spv
+	ld -r -b binary $< -o $@
+
+bin/shaders/water/%.o : shaders/water/%.spv
 	ld -r -b binary $< -o $@
 
 bin/fonts/%.o : fonts/%.ttf

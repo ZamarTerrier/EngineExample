@@ -62,6 +62,8 @@ obj = \
         particle/vert2D.spv \
         particle/frag3D.spv \
         particle/vert3D.spv \
+        water/frag.spv \
+        water/vert.spv
 
 all: $(obj)
 	
@@ -249,6 +251,12 @@ text/frag.spv : text/shader.frag
 	glslc $< -o $@
 
 text/vert.spv : text/shader.vert
+	glslc $< -o $@
+
+water/frag.spv : water/shader.frag
+	glslc $< -o $@
+
+water/vert.spv : water/shader.vert
 	glslc $< -o $@
 
 clean: $(obj)
