@@ -22,8 +22,6 @@
 
 SkyObject skybox;
 
-PrimitiveObject cube;
-
 WaterObject wave;
 
 TreeObject tree;
@@ -93,28 +91,6 @@ void InitLandscape(){
         ToolsAddStrings(dParam.diffuse, 256, path, "/textures/water.jpg");
         WaterObjectInitDefault(&wave, &dParam, 1000);
         Transform3DSetPosition(&wave, 0, -140, 0);
-    }
-
-    //Пояс тигрибов-----------------------------------------------
-    {
-        /*PrimitiveObjectInit(&cube, &dParam, ENGINE_PRIMITIVE3D_CUBE, NULL);
-        GameObject3DInitInstances(&cube);
-
-        for(int i=0;i < 50000;i++){
-            cube.go.instances[i].position.x = rand() % 500;
-            cube.go.instances[i].position.y = rand() % 500;
-            cube.go.instances[i].position.z = rand() % 500;
-            cube.go.instances[i].rotation.x = 0;
-            cube.go.instances[i].rotation.y = 0;
-            cube.go.instances[i].rotation.z = 0;
-            cube.go.instances[i].scale = 1;
-        }
-
-        cube.go.num_instances = 50000;
-
-        GameObject3DUpdateInstances(&cube);
-        PrimitiveObjectSetInstanceDescriptor(&cube, &dParam);
-        GameObject3DInitDraw(&cube);*/
     }
 
     vertexParam *vParam = &land.go.graphObj.shapes[0].vParam;

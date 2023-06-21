@@ -59,8 +59,8 @@ void Init(){
     SysInit();
     SysCalcDirLight();
 
-    //InitMeshes();
-    InitLandscape();
+    InitMeshes();
+    //InitLandscape();
     //SpriteInit();
     //GUIInit();
     //PainterInit();
@@ -110,8 +110,8 @@ void UpdateCascades(float deltaTime)
 void Update(double deltaTime){
 
     SysUpdate(deltaTime);
-    //UpdateMeshes(deltaTime);
-    UpdateLandscape(deltaTime);
+    UpdateMeshes(deltaTime);
+    //UpdateLandscape(deltaTime);
     //SpriteUpdate(deltaTime);
     //GUIUpdate();
     //PainterUpdate();
@@ -121,8 +121,8 @@ void Update(double deltaTime){
 
 void Draw(){
 
-    //DrawMeshes();
-    DrawLandscape();
+    DrawMeshes();
+    //DrawLandscape();
     //SpriteDraw();
     //GUIDraw();
     //PainterDraw();
@@ -139,8 +139,8 @@ void Draw(){
 
 
 void CleanUp(){
-    //DestroyMeshes();
-    DestroyLandscape();
+    DestroyMeshes();
+    //DestroyLandscape();
     //SpriteDestroy();
     //GUIDestroy();
     //PainterDestroy();

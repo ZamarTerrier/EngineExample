@@ -11,6 +11,7 @@
 #include "gameObject3D.h"
 
 #include "sky_object.h"
+#include "primitiveObject.h"
 #include "water_object.h"
 #include "terrain_object.h"
 
@@ -23,6 +24,8 @@ SkyObject skydome;
 TerrainObject terrain;
 
 WaterObject water;
+
+PrimitiveObject cube;
 
 uint32_t *my_map;
 
@@ -38,6 +41,31 @@ void InitMeshes(){
 
     dParam.render = &render_window;
 
+
+    //Скопление тигрибов-----------------------------------------------
+    {
+        ToolsAddStrings(dParam.diffuse, 256, path, "/textures/texture.jpg");
+        PrimitiveObjectInit(&cube, &dParam, ENGINE_PRIMITIVE3D_CUBE, NULL);
+        GameObject3DInitInstances(&cube);
+
+        for(int i=0;i < UINT16_MAX;i++){
+            cube.go.instances[i].position.x = rand() % 1000;
+            cube.go.instances[i].position.y = rand() % 1000;
+            cube.go.instances[i].position.z = rand() % 1000;
+            cube.go.instances[i].rotation.x = 0;
+            cube.go.instances[i].rotation.y = 0;
+            cube.go.instances[i].rotation.z = 0;
+            cube.go.instances[i].scale = 1;
+        }
+
+        cube.go.num_instances = UINT16_MAX;
+
+        GameObject3DUpdateInstances(&cube);
+        PrimitiveObjectSetInstanceDescriptor(&cube, &dParam);
+        GameObject3DInitDraw(&cube);
+    }
+
+    //Террайн-----------------------------------------------------------
     TerrainParam tParam;
     TerrainObjectMakeDefaultParams(&tParam, TEXTURE_WIDTH, TEXTURE_HEIGHT, 1024);
 
@@ -69,7 +97,7 @@ void InitMeshes(){
 
 
     //Небо---------------------------------------------------------------
-    SkyObjectInit(&skydome, &dParam, ENGINE_SKY_TYPE_ATMOSPHERIC);
+    SkyObjectInit(&skydome, &dParam, ENGINE_SKY_TYPE_NIGHT);
     SkyObjectAddDefault(&skydome, &render_window);
     GameObject2DInitDraw(&skydome);
 
@@ -114,8 +142,10 @@ void UpdateMeshes(double deltaTime){
 void DrawMeshes(){
     EngineDraw(&skydome);
 
-    EngineDraw(&terrain);
-    EngineDraw(&water);
+    /*EngineDraw(&terrain);
+    EngineDraw(&water);*/
+
+    EngineDraw(&cube);
 }
 
 void DestroyMeshes(){
@@ -123,4 +153,6 @@ void DestroyMeshes(){
 
     GameObjectDestroy(&terrain);
     GameObjectDestroy(&water);
+
+    GameObjectDestroy(&cube);
 }
