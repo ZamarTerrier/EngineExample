@@ -61,16 +61,16 @@ void InitLandscape(){
     {
         TerrainParam tParam;
         TerrainObjectMakeOldDefaultParams(&tParam, TEXTURE_WIDTH, TEXTURE_WIDTH, 1024);
-        tParam.vertex_step += 2.0f;
+        tParam.vertex_step += 1.0f;
         tParam.t_g_param.octaves ++;
-        tParam.t_g_param.size_factor += 40;
-        tParam.t_g_param.height_factor += 30;
+        tParam.t_g_param.size_factor += 50;
+        tParam.t_g_param.height_factor += 35;
         tParam.flags |= ENGINE_TERRIAN_FLAGS_GENERATE_HEIGHTS_OLD;
 
         tParam.textures = (char **)calloc(20, sizeof(char *));
 
         tParam.texture_map = ToolsMakeString(path, "/textures/texture_map.png");
-        AddTextureToTextures(&tParam, "/textures/wave.png");
+        AddTextureToTextures(&tParam, "/textures/sand.jpg");
         AddTextureToTextures(&tParam, "/textures/rock.jpg");
         AddTextureToTextures(&tParam, "/textures/snow_rock.jpg");
         AddTextureToTextures(&tParam, "/textures/grass.jpg");
@@ -90,7 +90,7 @@ void InitLandscape(){
     {
         ToolsAddStrings(dParam.diffuse, 256, path, "/textures/water.jpg");
         WaterObjectInitDefault(&wave, &dParam, 1000);
-        Transform3DSetPosition(&wave, 0, -140, 0);
+        Transform3DSetPosition(&wave, 0, -160, 0);
     }
 
     vertexParam *vParam = &land.go.graphObj.shapes[0].vParam;
@@ -118,7 +118,7 @@ void InitLandscape(){
             if(iter >= vParam->verticesSize)
                 break;
 
-            while(verts[iter].position.y > -10 || verts[iter].position.y < -110)
+            while(verts[iter].position.y > -10 || verts[iter].position.y < -140)
             {
                 iter += rand() % 3 + 7;
 
@@ -158,7 +158,7 @@ void InitLandscape(){
             if(iter >= vParam->verticesSize)
                 break;
 
-            while(verts[iter].position.y > -10 || verts[iter].position.y < -110)
+            while(verts[iter].position.y > -10 || verts[iter].position.y < -140)
             {
                 iter += rand() % 3 + 3;
 
@@ -214,7 +214,7 @@ void InitLandscape(){
             if(iter >= vParam->verticesSize)
                 break;
 
-            while(verts[iter].position.y > -10 || verts[iter].position.y < -70)
+            while(verts[iter].position.y > -10 || verts[iter].position.y < -110)
             {
                 iter += rand() % 100  + 130;
 
@@ -266,7 +266,7 @@ void InitLandscape(){
             if(iter >= vParam->verticesSize)
                 break;
 
-            while(verts[iter].position.y > -40 || verts[iter].position.y < -100)
+            while(verts[iter].position.y > -40 || verts[iter].position.y < -140)
             {
                 iter += rand() % 50  + 17;
 
