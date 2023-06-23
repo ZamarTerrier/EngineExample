@@ -60,7 +60,7 @@ void InitLandscape(){
     //Террайн -----------------------------------------------
     {
         TerrainParam tParam;
-        TerrainObjectMakeOldDefaultParams(&tParam, TEXTURE_WIDTH, TEXTURE_WIDTH, 1024);
+        TerrainObjectMakeOldDefaultParams(&tParam, TEXTURE_MAP_SIZE, TEXTURE_MAP_SIZE, 1024);
         tParam.vertex_step += 1.0f;
         tParam.t_g_param.octaves ++;
         tParam.t_g_param.size_factor += 50;
@@ -77,7 +77,7 @@ void InitLandscape(){
 
         TerrainObjectDefaultInit(&land, &dParam, &tParam);
 
-        some_map = calloc(TEXTURE_WIDTH * TEXTURE_HEIGHT, sizeof(uint32_t));
+        some_map = calloc(TEXTURE_MAP_SIZE * TEXTURE_MAP_SIZE, sizeof(uint16_t));
         TerrainObjectGenerateTerrainTextureMap(&land, some_map);
         free(some_map);
         GameObject3DEnableLight(&land, true);

@@ -9,6 +9,14 @@ layout (location = 3) in vec3 inLightVec;
 
 layout (location = 0) out vec4 outFragColor;
 
+float fog(float density)
+{
+        const float LOG2 = -1.442695;
+        float dist = gl_FragCoord.z / gl_FragCoord.w * 0.0015;
+        float d = density * dist;
+        return 1.0 - clamp(exp2(d * d * LOG2), 0.0, 1.0);
+}
+
 void main()
 {
     vec4 color = texture(diffuse, inUV);
@@ -16,5 +24,6 @@ void main()
     if(color.a < 0.8)
         discard;
 
-    outFragColor = vec4(color.rgb, 1.0);
+    const vec4 fogColor = vec4(0.47, 0.5, 0.67, 0.0);
+    outFragColor = mix(color, fogColor, fog(0.25));
 }

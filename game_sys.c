@@ -154,10 +154,14 @@ void CamRotateView(float deltaTime){
         pitch = -89.0f;
 
     vec3 direction = Camera3DGetRotation();
-    direction.x = cos(yaw * (M_PI / 180)) * cos(pitch * (M_PI / 180));
-    direction.y = -sin(pitch * (M_PI / 180));
-    direction.z = sin(yaw * (M_PI / 180)) * cos(pitch * (M_PI / 180));
-    Camera3DSetRotation(direction.x, direction.y, direction.z);
+    vec3 next_rotation, result;
+    next_rotation.x = cos(yaw * (M_PI / 180)) * cos(pitch * (M_PI / 180));
+    next_rotation.y = -sin(pitch * (M_PI / 180));
+    next_rotation.z = sin(yaw * (M_PI / 180)) * cos(pitch * (M_PI / 180));
+
+    result = v3_lerp(direction, next_rotation, 0.1f);
+
+    Camera3DSetRotation(next_rotation.x, next_rotation.y, next_rotation.z);
 }
 
 

@@ -50,9 +50,6 @@ struct LightPos{
 
 layout(binding = 2) uniform TextureBubber {
     int multi_size;
-    int num_textures;
-    vec2 some_val;
-    vec4 tex_colors[MAX_TEXTURES];
 } tb;
 
 layout(binding = 3) uniform DirLightBuffer{
@@ -161,99 +158,32 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir, vec
     }
 }
 
-vec3 FindNearPixel(float cmp, inout int find, vec2 tiled_coords)
-{
-    vec3 mak_color = vec3(0);
-
-    for(int i=0; i < tb.num_textures;i++)
-    {
-        float cmp_t = floor(tb.tex_colors[i].x) + floor(tb.tex_colors[i].y) + floor(tb.tex_colors[i].z) + floor(tb.tex_colors[i].w);
-
-        if(cmp_t == cmp)
-        {
-            mak_color = texture(diffuse[i], tiled_coords).rgb;
-
-            find = 1;
-
-            break;
-        }
-    }
-
-    return mak_color;
-}
-
-vec3 FindInQuality(float Quality, vec2 tiled_coords)
-{
-    vec3 color = vec3(0);
-
-    float Pi = 3.1415926536;
-
-    int near = 0;
-
-    float cmp_temp = 0;
-
-    ivec2 tex_size_vec = textureSize(texture_map, 0);
-    float pixel_size_x = 1.0 / float(tex_size_vec.x);
-    float pixel_size_y = 1.0 / float(tex_size_vec.y);
-
-    for(float x= -pixel_size_x * Quality; x < pixel_size_x * Quality; x += pixel_size_x)
-    {
-        for(float y= -pixel_size_y * Quality; y < pixel_size_y * Quality; y += pixel_size_y)
-        {
-            vec4 temp_map = texture(texture_map, inUV + vec2(x, y));
-
-            cmp_temp = floor(temp_map.x) + floor(temp_map.y) + floor(temp_map.z) + floor(temp_map.w);
-
-            color = FindNearPixel(cmp_temp, near, tiled_coords);
-
-            if(near == 1)
-                break;
-        }
-    }
-
-    return color;
-}
-
 vec4 FindDepthColor()
 {
     vec4 color = vec4(1);
 
-    vec2 tiled_coords = inUV * tb.multi_size;
-
-    vec2 tiled_coords2 = inUV * (tb.multi_size / 10);
-
-    vec2 tiled_coords3 = inUV * (tb.multi_size / 15);
-
     float Quality = 4.0;
 
-    if(inEyePos.z > 240)
+    vec2 tiled_coords = inUV * tb.multi_size;
+
+    uint cmp_t;
+
+    uint cmp = texture(texture_map, inUV).r;
+
+    color.rgb = texture(diffuse[cmp], tiled_coords).rgb;
+
+    /*
+    for(int i=0; i < tb.num_textures;i++)
     {
-        vec3 color1 = FindInQuality(Quality, tiled_coords3);
+        cmp_t = tb.tex_colors[i];
 
-        color = vec4(color1, 1.0);
+        if(cmp_t == cmp)
+        {
+            color.rgb = texture(diffuse[i], tiled_coords).rgb;
 
-    }else if(inEyePos.z > 140)
-    {
-        float s_val = 1.0f / 240 * inDepth;
-        float s_val2 = 1.0f - s_val;
-
-        vec3 color1 = FindInQuality(Quality, tiled_coords2) * s_val2;
-        vec3 color2 = FindInQuality(Quality, tiled_coords3) * s_val;
-
-        color = vec4(color1 + color2, 1.0);
-
-    }else if(inEyePos.z > 20)
-    {
-        float s_val = 1.0f / 140 * inDepth;
-        float s_val2 = 1.0f - s_val;
-
-        vec3 color1 = FindInQuality(Quality, tiled_coords) * s_val2;
-        vec3 color2 = FindInQuality(Quality, tiled_coords2) * s_val;
-
-        color = vec4(color1 + color2, 1.0);
-
-    }else
-        color = vec4(FindInQuality(Quality, tiled_coords), 1.0);
+            break;
+        }
+    }*/
 
     return color;
 }
@@ -261,7 +191,7 @@ vec4 FindDepthColor()
 float fog(float density)
 {
         const float LOG2 = -1.442695;
-        float dist = gl_FragCoord.z / gl_FragCoord.w * 0.001;
+        float dist = gl_FragCoord.z / gl_FragCoord.w * 0.0015;
         float d = density * dist;
         return 1.0 - clamp(exp2(d * d * LOG2), 0.0, 1.0);
 }

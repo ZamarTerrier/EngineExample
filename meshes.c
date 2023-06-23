@@ -48,6 +48,9 @@ void *my_map;
 
 uint32_t size_terrain = 400;
 
+const float coeff = 5.85;
+const float resist = 4.15f;
+
 void MeshesAddTextureToTextures(TerrainParam * tParam, char * name)
 {
     tParam->textures[tParam->t_t_param.num_textures] = ToolsMakeString(path, name);
@@ -85,7 +88,7 @@ void InitMeshes(){
 
     //Террайн-----------------------------------------------------------
     TerrainParam tParam;
-    TerrainObjectMakeDefaultParams(&tParam, TEXTURE_WIDTH, TEXTURE_HEIGHT, HEIGHT_MAP_SIZE);
+    TerrainObjectMakeDefaultParams(&tParam, TEXTURE_MAP_SIZE, TEXTURE_MAP_SIZE, HEIGHT_MAP_SIZE);
 
     //tParam.flags &= ~(ENGINE_TERRIAN_FLAGS_GENERATE_HEIGHTS);
     //tParam.flags |= ENGINE_TERRIAN_FLAGS_GENERATE_HEIGHTS_OLD;
@@ -103,7 +106,7 @@ void InitMeshes(){
 
     TerrainObjectDefaultInit(&terrain, &dParam, &tParam);
 
-    my_map = calloc((TEXTURE_WIDTH + 1) * (TEXTURE_HEIGHT + 1), sizeof(uint32_t));
+    my_map = calloc(TEXTURE_MAP_SIZE * TEXTURE_MAP_SIZE, sizeof(uint16_t));
     TerrainObjectGenerateTerrainTextureMap(&terrain, my_map);
     free(my_map);
     TerrainObjectGenerateTerrainHeightTextureMap(&terrain);
@@ -148,9 +151,9 @@ void InitMeshes(){
         treeParams.height = 35;
         treeParams.grad = 0.004f;
         treeParams.max_branches = 7;
-        treeParams.mutable_rotation = vec3_f(45, 10, 25);
+        treeParams.mutable_rotation = vec3_f(45, 10, 35);
         treeParams.start_rotation = vec3_f(0, 0, 0);
-        treeParams.radius = 2;
+        treeParams.radius = 4;
         treeParams.tree_color = vec3_f(0.54, 0.26, 0.074);
         treeParams.leaf_color = vec3_f(0.1, 0.3, 0.1);
 
@@ -167,9 +170,9 @@ void InitMeshes(){
             {
                 height = -TerrainObjectGetHeight(&terrain, x, z);
 
-                while(height > -240 || height < -330)
+                while(height > -240 || height < -370)
                 {
-                    z += rand() % 50;
+                    z += rand() % 80;
 
                     if(z >= size_terrain)
                     {
@@ -183,13 +186,14 @@ void InitMeshes(){
                 if(some_break)
                     break;
 
-                vertex.position.x = (x - 4.0f - size_terrain / 2.0) * 3.93f;
+                vertex.position.x = (x - resist - size_terrain / 2.0) * coeff;
                 vertex.position.y = height + 2;
-                vertex.position.z = (z - 4.0f - size_terrain / 2.0) * 3.93f;
+                vertex.position.z = (z - resist - size_terrain / 2.0) * coeff;
+                vertex.rotation.y = (float)(random() % 100) / 100;
 
                 GameObject3DAddInstance(&tree_mesh, vertex);
 
-                z += rand() % 50;
+                z += rand() % 80;
             }
 
             x += rand() % 10;
@@ -205,7 +209,7 @@ void InitMeshes(){
         TreeParams treeParams;
         treeParams.grad = 0.005f;
         treeParams.height = 8;
-        treeParams.max_branches = 4;
+        treeParams.max_branches = 5;
         treeParams.mutable_rotation = vec3_f(45, 10, -5);
         treeParams.start_rotation = vec3_f(0, 0, 0);
         treeParams.radius = 2;
@@ -225,9 +229,9 @@ void InitMeshes(){
             {
                 height = -TerrainObjectGetHeight(&terrain, x, z);
 
-                while(height > -240 || height < -330)
+                while(height > -240 || height < -370)
                 {
-                    z += rand() % 10;
+                    z += rand() % 50;
 
                     if(z >= size_terrain)
                     {
@@ -241,13 +245,14 @@ void InitMeshes(){
                 if(some_break)
                     break;
 
-                vertex.position.x = (x - 4.0f - size_terrain / 2.0) * 3.93f;
+                vertex.position.x = (x - resist - size_terrain / 2.0) * coeff;
                 vertex.position.y = height + 2;
-                vertex.position.z = (z - 4.0f - size_terrain / 2.0) * 3.93f;
+                vertex.position.z = (z - resist - size_terrain / 2.0) * coeff;
+                vertex.rotation.y = (float)(random() % 100) / 100;
 
                 GameObject3DAddInstance(&cust_mesh, vertex);
 
-                z += rand() % 10;
+                z += rand() % 50;
             }
 
             x += rand() % 5;
@@ -274,7 +279,7 @@ void InitMeshes(){
             {
                 height = -TerrainObjectGetHeight(&terrain, x, z);
 
-                while(height > -235 || height < -340)
+                while(height > -235 || height < -380)
                 {
                     z += rand() % 2;
 
@@ -290,9 +295,9 @@ void InitMeshes(){
                 if(some_break)
                     break;
 
-                vertex.position.x = (x - 4.0f - size_terrain / 2.0) * 3.93f;
+                vertex.position.x = (x - resist - size_terrain / 2.0) * coeff;
                 vertex.position.y = height + 4;
-                vertex.position.z = (z - 4.0f - size_terrain / 2.0) * 3.93f;
+                vertex.position.z = (z - resist - size_terrain / 2.0) * coeff;
                 vertex.rotation.y = (float)(random() % 100) / 100;
 
                 GameObject3DAddInstance(&grass_mesh, vertex);
@@ -318,7 +323,7 @@ void InitMeshes(){
             {
                 height = -TerrainObjectGetHeight(&terrain, x, z);
 
-                while(height > -235 || height < -340)
+                while(height > -235 || height < -380)
                 {
                     z += rand() % 2;
 
@@ -334,9 +339,9 @@ void InitMeshes(){
                 if(some_break)
                     break;
 
-                vertex.position.x = (x - 4.0f - size_terrain / 2.0) * 3.93f;
+                vertex.position.x = (x - resist - size_terrain / 2.0) * coeff;
                 vertex.position.y = height + 4;
-                vertex.position.z = (z - 4.0f - size_terrain / 2.0) * 3.93f;
+                vertex.position.z = (z - resist - size_terrain / 2.0) * coeff;
                 vertex.rotation.y = (float)(random() % 100) / 100;
 
                 GameObject3DAddInstance(&grass2_mesh, vertex);
@@ -365,7 +370,7 @@ void InitMeshes(){
     //Водичка----------------------------------------------------------
     ToolsAddStrings(dParam.diffuse, 256, path, "/textures/water.jpg");
     WaterObjectInitDefault(&water, &dParam, 1000);
-    Transform3DSetPosition(&water, 0, -340, 0);
+    Transform3DSetPosition(&water, 0, -380, 0);
 
 
     //Небо---------------------------------------------------------------
@@ -373,7 +378,7 @@ void InitMeshes(){
     SkyObjectAddDefault(&skydome, &render_window);
     GameObject2DInitDraw(&skydome);
 
-    Camera3DSetPosition(0, 0, 0);
+    Camera3DSetPosition(0, -200, 0);
 }
 
 void MeshesSomeWalk()
@@ -381,12 +386,13 @@ void MeshesSomeWalk()
 
     vec3 pos = Camera3DGetPosition();
 
-    uint32_t some_x = ceil(pos.x / 3.88f * 64) / 64 + (size_terrain / 2.0 + 5.0);
-    uint32_t some_z = ceil(pos.z / 3.88f * 64) / 64 + (size_terrain / 2.0 + 5.0);
+    float del = 512.0f;
+    uint32_t some_x = ceil(pos.x / coeff * del) / del + (size_terrain / 2.0 + resist);
+    uint32_t some_z = ceil(pos.z / coeff * del) / del + (size_terrain / 2.0 + resist);
 
     float some_val = -TerrainObjectGetHeight(&terrain, some_x, some_z);
 
-    pos.y = lerp(pos.y, some_val +8, 0.1f);
+    pos.y = lerp(pos.y, some_val + 10, 0.1f);
 
     //LightObjectSetPosition(&point_light, pos.x, pos.y + 1, pos.z);
 

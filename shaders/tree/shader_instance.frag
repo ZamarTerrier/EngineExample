@@ -13,6 +13,14 @@ float sdEgg(vec2 p, float ra, float rb)
     return ((p.y < 0.0) ? length(vec2(p.x, p.y)) - r : (k * (p.x + r) < p.y) ? length(vec2(p.x, p.y - k * r)) : length(vec2(p.x + r, p.y)) - 2.0 * r) - rb;
 }
 
+float fog(float density)
+{
+        const float LOG2 = -1.442695;
+        float dist = gl_FragCoord.z / gl_FragCoord.w * 0.0015;
+        float d = density * dist;
+        return 1.0 - clamp(exp2(d * d * LOG2), 0.0, 1.0);
+}
+
 void main() {
 
     vec4 color = vec4(inColor, 1.0);
@@ -29,7 +37,8 @@ void main() {
     else
         color.rgb *= abs(d) / 10;
 
-    outColor = color;
+    const vec4 fogColor = vec4(0.47, 0.5, 0.67, 0.0);
+    outColor = mix(color, fogColor, fog(0.25));
 
 }
 

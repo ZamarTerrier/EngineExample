@@ -10,8 +10,7 @@
 #define MAX_CUBE_SHADOWS 2
 #define MAX_SPOT_SHADOWS 2
 
-#define TEXTURE_HEIGHT 2048
-#define TEXTURE_WIDTH 2048
+#define TEXTURE_MAP_SIZE 4096
 
 extern Camera2D camera2D;
 extern Camera3D camera3D;
